@@ -332,11 +332,28 @@ function lineChart(sel, dates, series, opt) {
     if (pts.length > 1)
       g += `<path d="M${pts.map(p=>p.map(c=>c.toFixed(1)).join(",")).join(" L")}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>`;
     pts.forEach(p => g += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${pts.length>14?2:3.5}" fill="${s.color}"/>`);
-    if (!opt.small && pts.length) {
-      const lastIdx = s.points.map((v,i)=>v==null?null:i).filter(v=>v!=null).pop();
-      g += `<text class="dlabel" x="${x(lastIdx)+8}" y="${y(s.points[lastIdx])+4}" fill="${s.color}" style="fill:${s.color}">${s.name}</text>`;
-    }
   });
+
+  // direct labels with collision avoidance: lines often sit on the same value,
+  // so labels are spread apart vertically instead of stacking unreadably
+  if (!opt.small) {
+    const labs = series.map(s => {
+      const lastIdx = s.points.map((v,i) => v==null ? null : i).filter(v => v!=null).pop();
+      if (lastIdx == null) return null;
+      return { name: s.name, color: s.color, x: x(lastIdx) + 8, y: y(s.points[lastIdx]) + 4 };
+    }).filter(Boolean).sort((a,b) => a.y - b.y);
+    const GAP = 14;
+    for (let i = 1; i < labs.length; i++)
+      if (labs[i].y - labs[i-1].y < GAP) labs[i].y = labs[i-1].y + GAP;
+    const over = labs.length ? labs[labs.length-1].y - (padT + ih + 4) : 0;
+    if (over > 0) {
+      labs.forEach(l => l.y -= over);
+      for (let i = labs.length - 2; i >= 0; i--)
+        if (labs[i+1].y - labs[i].y < GAP) labs[i].y = labs[i+1].y - GAP;
+    }
+    labs.forEach(l =>
+      g += `<text class="dlabel" x="${l.x}" y="${l.y.toFixed(1)}" style="fill:${l.color}">${l.name}</text>`);
+  }
   g += `<line id="xh" x1="0" x2="0" y1="${padT}" y2="${padT+ih}" stroke="var(--axis)" stroke-dasharray="3,3" visibility="hidden"/>`;
 
   host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="line chart">${g}</svg>`;

@@ -116,6 +116,32 @@ def grade(task: dict, output: str) -> bool:
             for k, t in g["required_keys"].items()
         )
 
+    if kind == "contains_all_words":
+        # whole-word match — substring matching is unsafe (Russian "восемь"
+        # contains "семь", so 848 spelled out would wrongly pass for 847)
+        tokens = set(re.findall(r"[a-zа-яё'-]+", output.lower()))
+        return all(w in tokens for w in g["expected"])
+
+    if kind == "all_of":
+        return all(grade({"grader": sub}, output) for sub in g["of"])
+
+    if kind == "no_letter":
+        return g["letter"].lower() not in output.lower()
+
+    if kind == "json_equal":
+        text = _strip_code_fences(output).strip()
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        if not m:
+            return False
+        try:
+            return json.loads(m.group(0)) == g["expected"]
+        except json.JSONDecodeError:
+            return False
+
+    if kind == "exact_words":
+        words = re.findall(r"[a-zа-яё'-]+", output.lower())
+        return " ".join(words) == g["expected"]
+
     if kind == "anagram_of":
         word = _normalize(answer)
         return (
