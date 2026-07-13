@@ -37,19 +37,37 @@ Aliases are pinned on purpose — the experiment is whether behavior behind an
 unchanged name changes (see `scripts/providers.py`):
 
 - Groq — `llama-3.3-70b-versatile`
+- Groq — `openai/gpt-oss-120b` (series `groq-oss`)
 - Google — `gemini-3.5-flash`
 - Mistral — `mistral-small-latest`
 - OpenRouter — `openai/gpt-oss-120b:free`
 - Cerebras — `gpt-oss-120b`
 
-OpenRouter and Cerebras deliberately serve the *same* open-weights model:
-if those two lines diverge, the difference is serving infrastructure
-(quantization, sampling, batching), not the weights.
+Groq, OpenRouter and Cerebras deliberately serve the *same* open-weights
+model (gpt-oss-120b): identical weights on three serving stacks. If those
+lines diverge, the difference is infrastructure (quantization, sampling,
+batching), not the weights.
 
-Alias changelog: 2026-07-13 (before first graded run for these providers) —
-gemini `2.5-flash`→`3.5-flash` (key had no access), cerebras
-`llama-3.3-70b`→`gpt-oss-120b` (model retired), openrouter llama
-`3.3-70b:free`→`gpt-oss-120b:free` (persistent upstream congestion).
+## When a watched alias dies mid-record
+
+Providers retire models (it happened in this project's first 24 hours). The
+rule, fixed in advance: **a dead alias ends its series** — the line stops on
+its last measured day and the death is recorded in the changelog below. A
+successor model starts a **new series from day zero**. A series is never
+silently re-pointed at different weights, because the series *is* the claim
+"same name, watched daily."
+
+## Changelog
+
+- 2026-07-13 (before first graded run for these providers): gemini
+  `2.5-flash`→`3.5-flash` (key had no access), cerebras
+  `llama-3.3-70b`→`gpt-oss-120b` (model retired), openrouter
+  `llama-3.3-70b:free`→`gpt-oss-120b:free` (persistent upstream congestion).
+- 2026-07-14: **battery v2 replaces v1** after exactly one live day: v1
+  saturated on reasoning models (97% on cerebras), leaving no headroom to
+  observe drift. Done at the cheapest possible moment; v1 day-1 data stays
+  in the repo, marked `battery_version=1`, and never mixes with v2 charts
+  or baselines. Also added: `groq-oss` series (third stack for gpt-oss-120b).
 
 A provider is skipped (recorded as absent, never as zero) if no API key is
 configured for it.

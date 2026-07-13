@@ -128,6 +128,11 @@ def grade(task: dict, output: str) -> bool:
     if kind == "no_letter":
         return g["letter"].lower() not in output.lower()
 
+    if kind == "nth_word":
+        words = re.findall(r"[A-Za-zА-Яа-яЁё'-]+", output)
+        n = g["n"]
+        return len(words) >= n and words[n - 1].lower() == g["expected"]
+
     if kind == "json_equal":
         text = _strip_code_fences(output).strip()
         m = re.search(r"\{.*\}", text, re.DOTALL)

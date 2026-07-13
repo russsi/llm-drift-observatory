@@ -1,14 +1,14 @@
 {
-  "version": 1,
-  "note": "Frozen battery v1 (freeze begins with the first live data run). Tasks are never edited or removed once live; new tasks may only be added under a bumped version, and scores are always reported per battery version. Difficulty is tuned to be hard for LLMs specifically (exact arithmetic, letter counting, compound format constraints) so strong models land below the ceiling and drift has room to show.",
+  "version": 2,
+  "note": "Battery v2, frozen 2026-07-14. v1 ran exactly one live day (2026-07-13) and saturated on reasoning models (cerebras gpt-oss-120b hit 97%), so it was replaced wholesale while the record was one day old — the cheapest moment it will ever be (see README changelog). From here the freeze is hard: tasks are never edited or removed; additions only under a bumped version; scores always reported per version; different versions never share a chart line or an alert baseline. Every expected answer in this file was verified computationally before freezing.",
   "answer_suffix": "\n\nEnd your reply with a final line in the form: Answer: <your final answer>",
   "tasks": [
     {
       "id": "math-01",
       "category": "math",
-      "prompt": "Compute 847 × 293 exactly.",
+      "prompt": "Compute 73914 × 8267 exactly.",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 248171}
+      "grader": {"type": "number", "expected": 611047038}
     },
     {
       "id": "math-02",
@@ -20,16 +20,16 @@
     {
       "id": "math-03",
       "category": "math",
-      "prompt": "How many trailing zeros does 100! (100 factorial) have?",
+      "prompt": "How many trailing zeros does 500! (500 factorial) have?",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 24}
+      "grader": {"type": "number", "expected": 124}
     },
     {
       "id": "math-04",
       "category": "math",
-      "prompt": "A shop reduces a jacket's price by 20%, then by a further 15%. The final price is 2040 rubles. What was the original price in rubles?",
+      "prompt": "A number is increased by 25%, and the result is then decreased by 40%, giving 360. What was the original number?",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 3000}
+      "grader": {"type": "number", "expected": 480}
     },
     {
       "id": "math-05",
@@ -41,9 +41,9 @@
     {
       "id": "math-06",
       "category": "math",
-      "prompt": "Two fair six-sided dice are rolled. What is the probability that the sum is at least 10? Give the answer as a fraction in lowest terms, like 3/4.",
+      "prompt": "How many five-digit numbers have digits that sum to exactly 9?",
       "use_answer_suffix": true,
-      "grader": {"type": "exact", "expected": "1/6"}
+      "grader": {"type": "number", "expected": 495}
     },
     {
       "id": "logic-01",
@@ -62,30 +62,30 @@
     {
       "id": "logic-03",
       "category": "logic",
-      "prompt": "Alice has 4 brothers and 3 sisters. How many sisters does Alice's brother have?",
+      "prompt": "On the same island of knights (always truthful) and knaves (always lying): A says \"B is a knave.\" B says \"A and C are the same type.\" What is C? Answer with one word: knight or knave.",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 4}
+      "grader": {"type": "exact", "expected": "knave"}
     },
     {
       "id": "logic-04",
       "category": "logic",
-      "prompt": "A doctor gives you 3 pills and tells you to take one every 30 minutes, starting now. After how many minutes do you take the last pill?",
+      "prompt": "A single-elimination (knockout) tournament starts with 137 players. How many matches are played in total to decide the champion?",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 60}
+      "grader": {"type": "number", "expected": 136}
     },
     {
       "id": "logic-05",
       "category": "logic",
-      "prompt": "The day after tomorrow is two days before Thursday. What day is today? Answer with the day name only.",
+      "prompt": "How many squares of all sizes are there on a 4×4 grid of unit squares?",
       "use_answer_suffix": true,
-      "grader": {"type": "exact", "expected": "sunday"}
+      "grader": {"type": "number", "expected": 30}
     },
     {
       "id": "logic-06",
       "category": "logic",
-      "prompt": "In a room of 12 people, everyone shakes hands with everyone else exactly once. How many handshakes happen in total?",
+      "prompt": "In how many distinct ways can the letters of the word DRIFT be arranged?",
       "use_answer_suffix": true,
-      "grader": {"type": "number", "expected": 66}
+      "grader": {"type": "number", "expected": 120}
     },
     {
       "id": "instr-01",
@@ -100,23 +100,27 @@
     {
       "id": "instr-02",
       "category": "instructions",
-      "prompt": "Output only a JSON object mapping each of the five English vowels (a, e, i, o, u) to its position in the English alphabet (a number).",
+      "prompt": "Write a sentence of exactly 12 words whose fourth word is \"drift\" and in which no word contains the letter \"o\". Output only the sentence.",
       "use_answer_suffix": false,
-      "grader": {"type": "json_equal", "expected": {"a": 1, "e": 5, "i": 9, "o": 15, "u": 21}}
+      "grader": {"type": "all_of", "of": [
+        {"type": "word_count", "expected": 12},
+        {"type": "nth_word", "n": 4, "expected": "drift"},
+        {"type": "no_letter", "letter": "o"}
+      ]}
     },
     {
       "id": "instr-03",
       "category": "instructions",
-      "prompt": "Output the words of this sentence in reverse order: \"The quick brown fox jumps over the lazy dog\". Output only the reversed sentence.",
+      "prompt": "Reverse the letters of the word «обороноспособность». Output only the reversed word.",
       "use_answer_suffix": false,
-      "grader": {"type": "exact_words", "expected": "dog lazy the over jumps fox brown quick the"}
+      "grader": {"type": "exact", "expected": "ьтсонбосопсоноробо"}
     },
     {
       "id": "instr-04",
       "category": "instructions",
-      "prompt": "Write the word \"benchmark\" backwards. Output only the reversed word.",
-      "use_answer_suffix": false,
-      "grader": {"type": "exact", "expected": "kramhcneb"}
+      "prompt": "How many times does the letter «о» appear in this sentence: «Молоко коровы полезно для здоровья, особенно холодным осенним утром»?",
+      "use_answer_suffix": true,
+      "grader": {"type": "number", "expected": 16}
     },
     {
       "id": "instr-05",
@@ -128,16 +132,16 @@
     {
       "id": "instr-06",
       "category": "instructions",
-      "prompt": "List the five English vowels in reverse alphabetical order, comma-separated, lowercase, no spaces. Output nothing else.",
+      "prompt": "For each letter of the word \"cab\", write its position in the English alphabet, comma-separated, no spaces. Output nothing else.",
       "use_answer_suffix": false,
-      "grader": {"type": "exact_squeezed", "expected": "u,o,i,e,a"}
+      "grader": {"type": "exact_squeezed", "expected": "3,1,2"}
     },
     {
       "id": "code-01",
       "category": "code",
-      "prompt": "Write a Python function f(n) that returns the n-th prime number, where f(1) == 2. It must work for n up to 100. Output only the code.",
+      "prompt": "Write a Python function f(n) that returns how many prime numbers are strictly less than n. It must work for n up to 10000. Output only the code.",
       "use_answer_suffix": false,
-      "grader": {"type": "code", "asserts": ["f(1) == 2", "f(10) == 29", "f(100) == 541"]}
+      "grader": {"type": "code", "asserts": ["f(10) == 4", "f(100) == 25", "f(2) == 0", "f(541) == 99"]}
     },
     {
       "id": "code-02",
@@ -149,9 +153,9 @@
     {
       "id": "code-03",
       "category": "code",
-      "prompt": "Write a Python function f(s) that returns True if the brackets in s — any mix of (), [], {} — are balanced and properly nested, else False. Non-bracket characters may be ignored. Output only the code.",
+      "prompt": "Write a Python function f(a, b) that returns the Levenshtein edit distance (insertions, deletions, substitutions) between strings a and b. Output only the code.",
       "use_answer_suffix": false,
-      "grader": {"type": "code", "asserts": ["f('([]{})') == True", "f('([)]') == False", "f('(') == False", "f('') == True"]}
+      "grader": {"type": "code", "asserts": ["f('kitten', 'sitting') == 3", "f('', 'abc') == 3", "f('same', 'same') == 0"]}
     },
     {
       "id": "code-04",
@@ -163,16 +167,16 @@
     {
       "id": "code-05",
       "category": "code",
-      "prompt": "Write a Python function f(a, b) that returns how many bit positions differ between the non-negative integers a and b. Output only the code.",
+      "prompt": "Write a Python function f(expr) that evaluates an arithmetic expression string containing non-negative integers, +, -, *, and parentheses, respecting precedence, and returns the integer result. Output only the code.",
       "use_answer_suffix": false,
-      "grader": {"type": "code", "asserts": ["f(1, 4) == 2", "f(0, 0) == 0", "f(255, 0) == 8"]}
+      "grader": {"type": "code", "asserts": ["f('2+3*4') == 14", "f('(2+3)*4') == 20", "f('10-2*3') == 4", "f('2*(3+4)*5') == 70"]}
     },
     {
       "id": "code-06",
       "category": "code",
-      "prompt": "Write a Python function f(lst) that returns the majority element of lst (the value appearing more than len(lst)/2 times), or None if there is no majority element. Output only the code.",
+      "prompt": "Write a Python function f(lst) that returns the length of the longest strictly increasing subsequence of lst. Output only the code.",
       "use_answer_suffix": false,
-      "grader": {"type": "code", "asserts": ["f([3, 3, 4, 3]) == 3", "f([1, 2]) == None", "f([1]) == 1"]}
+      "grader": {"type": "code", "asserts": ["f([10, 9, 2, 5, 3, 7, 101, 18]) == 4", "f([]) == 0", "f([5]) == 1"]}
     },
     {
       "id": "ru-01",
@@ -191,9 +195,9 @@
     {
       "id": "ru-03",
       "category": "russian",
-      "prompt": "Какое из этих слов написано с ошибкой: «карова», «собака», «кошка»? Ответьте этим словом, как оно написано здесь.",
+      "prompt": "В слове «звонит» ударение падает на какой слог? Ответьте числом: 1 или 2.",
       "use_answer_suffix": true,
-      "grader": {"type": "contains_any", "expected": ["карова"]}
+      "grader": {"type": "number", "expected": 2}
     },
     {
       "id": "ru-04",
@@ -205,9 +209,9 @@
     {
       "id": "ru-05",
       "category": "russian",
-      "prompt": "Как будет по-английски «двоюродный брат»? Ответьте одним словом.",
+      "prompt": "Как называется по-русски медленное постепенное смещение или снос (по-английски — drift)? Ответьте одним словом.",
       "use_answer_suffix": true,
-      "grader": {"type": "contains_any", "expected": ["cousin"]}
+      "grader": {"type": "contains_any", "expected": ["дрейф"]}
     },
     {
       "id": "ru-06",

@@ -12,7 +12,8 @@
   --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
   --good: #006300; --bad: #d03b3b;
   --s-groq: #2a78d6; --s-gemini: #1baf7a; --s-mistral: #eda100;
-  --s-openrouter: #008300; --s-cerebras: #4a3aa7; --s-mock: #e87ba4;
+  --s-openrouter: #008300; --s-cerebras: #4a3aa7; --s-groq-oss: #e34948;
+  --s-mock: #e87ba4;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -21,7 +22,8 @@
     --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
     --good: #0ca30c; --bad: #e66767;
     --s-groq: #3987e5; --s-gemini: #199e70; --s-mistral: #c98500;
-    --s-openrouter: #008300; --s-cerebras: #9085e9; --s-mock: #d55181;
+    --s-openrouter: #008300; --s-cerebras: #9085e9; --s-groq-oss: #e66767;
+    --s-mock: #d55181;
   }
 }
 * { box-sizing: border-box; margin: 0; }
@@ -162,6 +164,7 @@ const CAT_LABELS = { math:"Math", logic:"Logic", instructions:"Instruction follo
   code:"Code", russian:"Russian", refusal:"Answered (not over-refused)" };
 const MODEL_LINKS = {
   groq: "https://console.groq.com/docs/models",
+  "groq-oss": "https://console.groq.com/docs/models",
   gemini: "https://ai.google.dev/gemini-api/docs/models",
   mistral: "https://docs.mistral.ai/getting-started/models/",
   openrouter: "https://openrouter.ai/meta-llama/llama-3.3-70b-instruct:free",

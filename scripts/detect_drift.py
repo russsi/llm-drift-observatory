@@ -23,13 +23,18 @@ from pathlib import Path
 
 import requests
 
+from scripts.config import MIN_VALID
+
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "data" / "daily.csv"
 LOG = ROOT / "data" / "drift_log.jsonl"
 
 MIN_HISTORY = 5          # prior days required before drift can be claimed
 WINDOW = 7               # trailing baseline window
-SCORE_FLOOR = 0.12       # minimum absolute move for score metrics
+# Absolute floors sit above one-task quantization noise: a category has 6
+# tasks, so a single flip moves it 16.7pp — the 20pp floor demands at least
+# two flips. Overall has 36 tasks (one flip = 2.8pp), so 12pp stays meaningful.
+SCORE_FLOORS = {"overall": 0.12, "default": 0.20}
 STABILITY_FLOOR = 0.55   # same-prompt similarity below this is suspicious
 LATENCY_RATIO = 3.0      # p50 shift beyond this ratio is suspicious
 SCORE_METRICS = ["overall", "math", "logic", "instructions", "code", "russian", "refusal"]
@@ -49,15 +54,16 @@ def _fl(v):
         return None
 
 
-MIN_VALID = 30  # keep in sync with run_battery.MIN_VALID
-
-
 def check_provider(rows: list, today: str) -> list:
     """rows: all daily.csv rows for one provider, dates ascending.
-    Partial days (quota ran out mid-battery) are not measurements —
-    they enter neither the baseline nor today's comparison."""
+    Partial days (quota ran out mid-battery) are not measurements — they
+    enter neither the baseline nor today's comparison. Rows from a different
+    battery version are a different instrument and never mix into a baseline."""
     rows = [r for r in rows if int(r["n_graded"] or 0) >= MIN_VALID]
     todays = [r for r in rows if r["date"] == today]
+    if todays:
+        version = todays[-1]["battery_version"]
+        rows = [r for r in rows if r["battery_version"] == version]
     history = [r for r in rows if r["date"] < today]
     if not todays or len(history) < MIN_HISTORY:
         return []
@@ -73,7 +79,7 @@ def check_provider(rows: list, today: str) -> list:
             continue
         mean = statistics.mean(base)
         sd = statistics.stdev(base) if len(base) > 1 else 0.0
-        threshold = max(2 * sd, SCORE_FLOOR)
+        threshold = max(2 * sd, SCORE_FLOORS.get(metric, SCORE_FLOORS["default"]))
         if abs(now - mean) > threshold:
             alerts.append({
                 "type": "score_shift", "metric": metric,
@@ -123,13 +129,29 @@ def open_issue(provider: str, model: str, today: str, alerts: list) -> None:
     print(f"  issue: HTTP {r.status_code}")
 
 
+def logged_keys() -> set:
+    """(date, provider) pairs already in the append-only log — the log is
+    part of the auditable dataset, so a rerun must never duplicate entries."""
+    if not LOG.exists():
+        return set()
+    keys = set()
+    for line in LOG.read_text().splitlines():
+        e = json.loads(line)
+        keys.add((e["date"], e["provider"]))
+    return keys
+
+
 def main() -> None:
     today = os.environ.get("DRIFT_DATE", dt.date.today().isoformat())
     rows = load_rows()
     providers_today = sorted({r["provider"] for r in rows if r["date"] == today})
+    already = logged_keys()
 
     log_entries = []
     for p in providers_today:
+        if (today, p) in already:
+            print(f"{p}: already logged for {today}, skipping")
+            continue
         p_rows = sorted((r for r in rows if r["provider"] == p), key=lambda r: r["date"])
         alerts = check_provider(p_rows, today)
         model = p_rows[-1]["model_alias"]

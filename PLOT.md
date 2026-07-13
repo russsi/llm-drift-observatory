@@ -38,7 +38,7 @@ updates itself with zero manual operation.
 - [x] 5 providers watched, daily cron, deterministic grading, drift alerts
 - [x] Self-contained public dashboard (charts, task browser, alerts, raw data)
 - [ ] 7 consecutive green daily runs with ≥4 complete provider measurements
-- [ ] Repo public + GitHub Pages live
+- [x] Repo public + GitHub Pages live (2026-07-14)
 - [ ] One launch post (r/LocalLLaMA and/or HN) once ~14 days of history exist
 
 After v1 is done: **stop building for two weeks** and let the data accumulate.

@@ -6,7 +6,9 @@ name: Daily battery run
 
 on:
   schedule:
-    - cron: '47 5 * * *'   # daily 05:47 UTC (off the top of the hour)
+    - cron: '47 5 * * *'    # daily 05:47 UTC (off the top of the hour)
+    - cron: '47 13 * * *'   # automatic healing pass: reruns only providers
+                            # whose day is missing/partial; no-op otherwise
   workflow_dispatch:
 
 permissions:

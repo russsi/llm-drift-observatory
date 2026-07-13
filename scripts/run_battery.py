@@ -19,6 +19,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from scripts import providers
+from scripts.config import MIN_VALID
 from scripts.graders import grade, is_refusal
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -27,9 +28,6 @@ DAILY = ROOT / "data" / "daily.csv"
 BATTERY = ROOT / "battery" / "tasks.json"
 
 CATEGORIES = ["math", "logic", "instructions", "code", "russian", "refusal"]
-# a day counts as measured only if at least this many tasks were graded;
-# partial runs (quota ran out mid-battery) are display-excluded and healable
-MIN_VALID = 30
 # after this many consecutive exhausted-quota errors, stop calling — the
 # remaining tasks would all fail the same way
 QUOTA_ABORT_AFTER = 3
@@ -114,16 +112,18 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
         by_cat[cat] = round(sum(r["passed"] for r in cat_rows) / len(cat_rows), 4) if cat_rows else ""
 
     model_reported = next((r["model_reported"] for r in graded if r.get("model_reported")), "")
+    partial = len(graded) < MIN_VALID  # a partial day is not a measurement:
+    # its scores never enter the CSV (the raw transcripts keep every detail)
     summary = {
         "date": today,
         "provider": provider,
         "battery_version": battery["version"],
         "model_alias": "mock-1" if provider == "mock" else providers.PROVIDERS[provider]["model"],
         "model_reported": model_reported,
-        "overall": round(sum(r["passed"] for r in graded) / len(graded), 4) if graded else "",
-        **by_cat,
-        "stability": round(statistics.mean(sims), 4) if sims else "",
-        "latency_p50_ms": int(statistics.median(latencies)) if latencies else "",
+        "overall": "" if partial else round(sum(r["passed"] for r in graded) / len(graded), 4),
+        **({c: "" for c in CATEGORIES} if partial else by_cat),
+        "stability": "" if partial or not sims else round(statistics.mean(sims), 4),
+        "latency_p50_ms": "" if partial or not latencies else int(statistics.median(latencies)),
         "errors": errors,
         "n_graded": len(graded),
     }

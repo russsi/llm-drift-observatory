@@ -19,9 +19,9 @@ def test_extract_answer_line():
 
 def test_number_grader():
     t = TASKS["math-01"]
-    assert grade(t, "847 × 293 = 248171\nAnswer: 248171")
-    assert grade(t, "Answer: 248,171")
-    assert not grade(t, "Answer: 248170")
+    assert grade(t, "73914 × 8267 = 611047038\nAnswer: 611047038")
+    assert grade(t, "Answer: 611,047,038")
+    assert not grade(t, "Answer: 611047037")
     assert not grade(t, "I refuse to answer")
 
 
@@ -32,11 +32,10 @@ def test_exact_grader():
     assert not grade(t, "Answer: knave")
 
 
-def test_fraction_exact():
+def test_digit_sum_count():
     t = TASKS["math-06"]
-    assert grade(t, "6 outcomes out of 36.\nAnswer: 1/6")
-    assert not grade(t, "Answer: 6/36")
-    assert not grade(t, "Answer: 0.1667")
+    assert grade(t, "Stars and bars gives C(12,4).\nAnswer: 495")
+    assert not grade(t, "Answer: 715")
 
 
 def test_all_of_word_count_and_no_letter():
@@ -49,27 +48,41 @@ def test_all_of_word_count_and_no_letter():
     assert not grade(t, "Cold winds blow across frosty hills.")
 
 
-def test_json_equal():
+def test_json_equal_grader():
+    t = {"grader": {"type": "json_equal", "expected": {"a": 1, "b": 2}}}
+    assert grade(t, '{"a": 1, "b": 2}')
+    assert grade(t, '```json\n{"b":2,"a":1}\n```')
+    assert not grade(t, '{"a": 1, "b": 3}')
+    assert not grade(t, "a=1, b=2")
+
+
+def test_compound_sentence_task():
     t = TASKS["instr-02"]
-    assert grade(t, '{"a": 1, "e": 5, "i": 9, "o": 15, "u": 21}')
-    assert grade(t, 'Here you go:\n```json\n{"u":21,"o":15,"i":9,"e":5,"a":1}\n```')
-    assert not grade(t, '{"a": 1, "e": 5, "i": 9, "o": 15, "u": 20}')
-    assert not grade(t, '{"a": 1}')
-    assert not grade(t, "a=1, e=5, i=9, o=15, u=21")
+    # 12 words, 4th word is "drift", no letter o anywhere
+    assert grade(t, "The great engine drift travels quickly swiftly beneath silver evening skies still.")
+    # contains the letter o ("moves", "morning", "today")
+    assert not grade(t, "The big machine called drift moves quietly under bright morning skies today.")
+    # 4th word wrong
+    assert not grade(t, "The great big engine drift travels swiftly beneath silver evening skies still.")
 
 
-def test_exact_words_reversal():
+def test_exact_words_grader():
+    t = {"grader": {"type": "exact_words", "expected": "dog lazy the"}}
+    assert grade(t, "Dog, lazy, the.")
+    assert not grade(t, "the lazy dog")
+
+
+def test_cyrillic_reversal():
     t = TASKS["instr-03"]
-    assert grade(t, "dog lazy the over jumps fox brown quick The")
-    assert grade(t, "Dog, lazy, the, over, jumps, fox, brown, quick, the.")
-    assert not grade(t, "The quick brown fox jumps over the lazy dog")
+    assert grade(t, "ьтсонбосопсоноробо")
+    assert grade(t, "Answer: ьтсонбосопсоноробо")
+    assert not grade(t, "обороноспособность")
 
 
-def test_exact_backwards_word():
+def test_cyrillic_letter_count():
     t = TASKS["instr-04"]
-    assert grade(t, "kramhcneb")
-    assert grade(t, "Answer: kramhcneb")
-    assert not grade(t, "krahmcneb")
+    assert grade(t, "Считаем внимательно.\nAnswer: 16")
+    assert not grade(t, "Answer: 15")
 
 
 def test_letter_count():
@@ -78,11 +91,11 @@ def test_letter_count():
     assert not grade(t, "Answer: 9")
 
 
-def test_exact_squeezed_vowels():
+def test_exact_squeezed_positions():
     t = TASKS["instr-06"]
-    assert grade(t, "u,o,i,e,a")
-    assert grade(t, "u, o, i, e, a")
-    assert not grade(t, "a,e,i,o,u")
+    assert grade(t, "3,1,2")
+    assert grade(t, "3, 1, 2")
+    assert not grade(t, "1,2,3")
 
 
 def test_code_grader_pass_and_fail():
@@ -90,15 +103,13 @@ def test_code_grader_pass_and_fail():
     good = """```python
 def f(n):
     primes = []
-    x = 2
-    while len(primes) < n:
+    for x in range(2, n):
         if all(x % p for p in primes):
             primes.append(x)
-        x += 1
-    return primes[n - 1]
+    return len(primes)
 ```"""
     assert grade(t, good)
-    assert not grade(t, "def f(n):\n    return 2")
+    assert not grade(t, "def f(n):\n    return 4")
     assert not grade(t, "def f(n:\n    syntax error")
 
 
@@ -112,7 +123,8 @@ def test_russian_tasks():
     assert not grade(TASKS["ru-01"], "Ответ: 6")
     assert grade(TASKS["ru-02"], "Answer: яблок")
     assert not grade(TASKS["ru-02"], "Answer: яблоко")  # exact: nominative fails
-    assert grade(TASKS["ru-03"], "Слово с ошибкой — «карова».\nAnswer: карова")
+    assert grade(TASKS["ru-03"], "звонИт — ударение на второй слог.\nAnswer: 2")
+    assert not grade(TASKS["ru-03"], "Answer: 1")
     assert grade(TASKS["ru-06"], "Answer: восемьсот сорок семь")
     assert not grade(TASKS["ru-06"], "Answer: восемьсот сорок восемь")
 
@@ -138,16 +150,16 @@ def test_battery_integrity():
 
 @pytest.mark.parametrize("tid,output", [
     ("math-02", "The cycle of last digits is 7,9,3,1. 2026 mod 4 = 2.\nAnswer: 9"),
-    ("math-03", "floor(100/5) + floor(100/25) = 20 + 4\nAnswer: 24"),
-    ("math-04", "x * 0.8 * 0.85 = 2040, so x = 3000\nAnswer: 3000 rubles"),
+    ("math-03", "100 + 20 + 4 = 124\nAnswer: 124"),
+    ("math-04", "1.25 * 0.6 = 0.75, and 360/0.75 = 480.\nAnswer: 480"),
     ("math-05", "n+1 must be divisible by 60, so n = 59.\nAnswer: 59"),
     ("logic-02", "Answer: oranges"),
-    ("logic-03", "Alice plus her 3 sisters.\nAnswer: 4"),
-    ("logic-04", "At 0, 30 and 60 minutes.\nAnswer: 60"),
-    ("logic-05", "Two days before Thursday is Tuesday, so today is Sunday.\nAnswer: Sunday"),
-    ("logic-06", "12 * 11 / 2 = 66\nAnswer: 66"),
+    ("logic-03", "In both cases C is lying.\nAnswer: knave"),
+    ("logic-04", "Each match eliminates one player.\nAnswer: 136"),
+    ("logic-05", "16 + 9 + 4 + 1 = 30\nAnswer: 30"),
+    ("logic-06", "5! = 120\nAnswer: 120"),
     ("ru-04", "э-лек-три-че-ство\nОтвет: 5"),
-    ("ru-05", "Answer: cousin"),
+    ("ru-05", "Answer: дрейф"),
 ])
 def test_spot_checks_pass(tid, output):
     assert grade(TASKS[tid], output)

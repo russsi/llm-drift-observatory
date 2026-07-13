@@ -7,6 +7,8 @@ import datetime as dt
 import json
 from pathlib import Path
 
+from scripts.config import MIN_VALID
+
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "data" / "daily.csv"
 LOG = ROOT / "data" / "drift_log.jsonl"
@@ -14,22 +16,28 @@ BATTERY = ROOT / "battery" / "tasks.json"
 OUT = ROOT / "docs" / "data.json"
 
 # Fixed display order = fixed palette slot per provider (never reassigned).
-PROVIDER_ORDER = ["groq", "gemini", "mistral", "openrouter", "cerebras", "mock"]
+PROVIDER_ORDER = ["groq", "gemini", "mistral", "openrouter", "cerebras", "groq-oss", "mock"]
+
+SCORE_KEYS = ("overall", "math", "logic", "instructions", "code",
+              "russian", "refusal", "stability")
 
 
 def main() -> None:
+    battery = json.loads(BATTERY.read_text())
+    current_version = str(battery["version"])
+
     rows = []
     if DAILY.exists():
         with DAILY.open() as f:
             for r in csv.DictReader(f):
-                for k in ("overall", "math", "logic", "instructions", "code",
-                          "russian", "refusal", "stability"):
+                for k in SCORE_KEYS:
                     r[k] = float(r[k]) if r[k] else None
                 for k in ("latency_p50_ms", "errors", "n_graded"):
                     r[k] = int(float(r[k])) if r[k] else 0
-                if r["n_graded"] < 30:  # partial day: not a measurement
-                    for k in ("overall", "math", "logic", "instructions", "code",
-                              "russian", "refusal", "stability"):
+                # not chartable: partial days aren't measurements, and rows
+                # from an older battery version are a different instrument
+                if r["n_graded"] < MIN_VALID or r["battery_version"] != current_version:
+                    for k in SCORE_KEYS:
                         r[k] = None
                     r["latency_p50_ms"] = 0
                 rows.append(r)
@@ -51,7 +59,6 @@ def main() -> None:
     for r in rows:
         models[r["provider"]] = r["model_alias"]
 
-    battery = json.loads(BATTERY.read_text())
     tasks_pub = [
         {"id": t["id"], "category": t["category"], "prompt": t["prompt"],
          "grader": {"type": t["grader"]["type"]}}

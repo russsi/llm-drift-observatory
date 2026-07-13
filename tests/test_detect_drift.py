@@ -73,3 +73,22 @@ def test_partial_days_excluded_everywhere():
     # and partial days don't poison the baseline either
     rows = days(7) + [mkrow("2026-07-08", 0.10, n_graded=3)] + [mkrow("2026-07-09", 0.85)]
     assert check_provider(rows, "2026-07-09") == []
+
+
+def test_single_task_flip_in_category_stays_quiet():
+    # one flipped task in a 6-task category = 16.7pp, below the 20pp floor
+    rows = days(7, 0.8333) + [mkrow("2026-07-08", 0.8333, math=0.6667)]
+    assert check_provider(rows, "2026-07-08") == []
+
+
+def test_two_task_flip_in_category_alerts():
+    rows = days(7, 0.8333) + [mkrow("2026-07-08", 0.8333, math=0.5)]
+    alerts = check_provider(rows, "2026-07-08")
+    assert any(a["type"] == "score_shift" and a["metric"] == "math" for a in alerts)
+
+
+def test_battery_versions_never_share_a_baseline():
+    # 7 days of v1 history, then a v2 day with a huge apparent drop:
+    # no alert, because v2 has no baseline of its own yet
+    rows = days(7, 0.9) + [mkrow("2026-07-08", 0.30, battery_version="2")]
+    assert check_provider(rows, "2026-07-08") == []

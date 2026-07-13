@@ -22,6 +22,14 @@ PROVIDERS = {
         "url": "https://api.groq.com/openai/v1/chat/completions",
         "style": "openai",
     },
+    "groq-oss": {
+        # third serving stack for gpt-oss-120b (with cerebras + openrouter):
+        # identical weights on three infrastructures, same key as groq
+        "env": "GROQ_API_KEY",
+        "model": "openai/gpt-oss-120b",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "style": "openai",
+    },
     "gemini": {
         "env": "GEMINI_API_KEY",
         "model": "gemini-3.5-flash",
