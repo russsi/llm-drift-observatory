@@ -63,3 +63,13 @@ def test_latency_shift_flags():
 def test_missing_today_is_quiet():
     rows = days(7)
     assert check_provider(rows, "2026-07-08") == []
+
+
+def test_partial_days_excluded_everywhere():
+    # 7 good days, then a partial day with a huge apparent drop: no alert,
+    # because a partial day is not a measurement
+    rows = days(7) + [mkrow("2026-07-08", 0.30, n_graded=3)]
+    assert check_provider(rows, "2026-07-08") == []
+    # and partial days don't poison the baseline either
+    rows = days(7) + [mkrow("2026-07-08", 0.10, n_graded=3)] + [mkrow("2026-07-09", 0.85)]
+    assert check_provider(rows, "2026-07-09") == []

@@ -15,6 +15,7 @@ import difflib
 import json
 import statistics
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from scripts import providers
@@ -26,6 +27,12 @@ DAILY = ROOT / "data" / "daily.csv"
 BATTERY = ROOT / "battery" / "tasks.json"
 
 CATEGORIES = ["math", "logic", "instructions", "code", "russian", "refusal"]
+# a day counts as measured only if at least this many tasks were graded;
+# partial runs (quota ran out mid-battery) are display-excluded and healable
+MIN_VALID = 30
+# after this many consecutive exhausted-quota errors, stop calling — the
+# remaining tasks would all fail the same way
+QUOTA_ABORT_AFTER = 3
 FIELDS = (
     ["date", "provider", "battery_version", "model_alias", "model_reported", "overall"]
     + CATEGORIES
@@ -48,11 +55,22 @@ def previous_probe_texts(provider: str, today: str) -> dict:
     return {}
 
 
+def _is_quota_error(err: str) -> bool:
+    low = err.lower()
+    return "429" in low and ("quota" in low or "billing" in low)
+
+
 def run_provider(provider: str, battery: dict, today: str) -> dict:
     suffix = battery["answer_suffix"]
     records, probe_records, errors, latencies = [], [], 0, []
+    quota_streak = 0
 
     for task in battery["tasks"]:
+        if quota_streak >= QUOTA_ABORT_AFTER:
+            errors += 1
+            records.append({"id": task["id"], "category": task["category"],
+                            "error": "skipped: daily quota exhausted"})
+            continue
         prompt = task["prompt"] + (suffix if task["use_answer_suffix"] else "")
         try:
             resp = providers.ask(provider, prompt)
@@ -65,10 +83,13 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
                 "refused": is_refusal(resp["text"]),
             })
             latencies.append(resp["latency_ms"])
+            quota_streak = 0
         except providers.ProviderError as e:
             errors += 1
+            err = str(e)[:300]
             records.append({"id": task["id"], "category": task["category"],
-                            "error": str(e)[:300]})
+                            "error": err})
+            quota_streak = quota_streak + 1 if _is_quota_error(err) else 0
         time.sleep(providers.call_pause(provider))
 
     for probe in battery["stability_probes"]:
@@ -116,18 +137,19 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
 
 
 def completed_providers(date: str) -> set:
-    """Providers that already have a real (graded) row for this date.
-    Error-only rows don't count, so a rerun can heal a failed provider."""
+    """Providers that already have a complete measured row for this date.
+    Partial rows (n_graded < MIN_VALID) don't count, so a rerun can heal."""
     if not DAILY.exists():
         return set()
     with DAILY.open() as f:
         return {r["provider"] for r in csv.DictReader(f)
-                if r["date"] == date and int(r["n_graded"] or 0) > 0}
+                if r["date"] == date and int(r["n_graded"] or 0) >= MIN_VALID}
 
 
 def append_daily(rows: list) -> None:
-    """One row per provider+date. A graded row is immutable; an error-only
-    row (n_graded == 0) may be replaced by a later successful rerun."""
+    """One row per provider+date. A complete row (n_graded >= MIN_VALID) is
+    immutable; a partial or error-only row may be replaced by a rerun that
+    graded strictly more tasks."""
     existing = []
     if DAILY.exists():
         with DAILY.open() as f:
@@ -136,7 +158,8 @@ def append_daily(rows: list) -> None:
     for row in rows:
         key = (row["date"], row["provider"])
         old = by_key.get(key)
-        if old is None or (int(old["n_graded"] or 0) == 0 and row["n_graded"] > 0):
+        old_n = int(old["n_graded"] or 0) if old else -1
+        if old is None or (old_n < MIN_VALID and row["n_graded"] > old_n):
             by_key[key] = {k: row[k] for k in FIELDS}
     with DAILY.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
@@ -162,11 +185,16 @@ def main() -> None:
 
     print(f"battery v{battery['version']}, providers: {', '.join(active) or '(none left)'}")
     rows = []
-    for p in active:
-        print(f"→ {p} ...", flush=True)
-        row = run_provider(p, battery, args.date)
-        rows.append(row)
-        print(f"  overall={row['overall']} errors={row['errors']}")
+    if active:
+        # providers have independent rate limits, so they run in parallel;
+        # pacing between calls to the SAME provider is preserved inside
+        # run_provider
+        with ThreadPoolExecutor(max_workers=len(active)) as pool:
+            futures = {p: pool.submit(run_provider, p, battery, args.date) for p in active}
+            for p, fut in futures.items():
+                row = fut.result()
+                rows.append(row)
+                print(f"{p}: overall={row['overall']} errors={row['errors']}", flush=True)
     append_daily(rows)
     print(f"done: {len(rows)} provider(s) recorded for {args.date}")
 

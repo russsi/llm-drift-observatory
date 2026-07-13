@@ -151,9 +151,13 @@ def ask(provider: str, prompt: str) -> dict:
             return out
         except (ProviderError, requests.RequestException) as e:
             last_err = e
-            # 4xx other than 429 won't heal on retry
             msg = str(e)
+            # 4xx other than 429 won't heal on retry; neither will a daily
+            # quota 429 — retrying it just burns backoff time (and possibly
+            # more quota)
             if msg.startswith("HTTP 4") and not msg.startswith("HTTP 429"):
+                break
+            if msg.startswith("HTTP 429") and ("quota" in msg.lower() or "billing" in msg.lower()):
                 break
             time.sleep((2 ** attempt) * 3 + random.random())
     raise ProviderError(f"{provider}: {last_err}")

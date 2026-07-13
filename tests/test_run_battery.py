@@ -53,3 +53,28 @@ def test_completed_providers_ignores_error_rows(tmp_path, monkeypatch):
     ])
     assert rb.completed_providers("2026-07-13") == {"groq"}
     assert rb.completed_providers("2026-07-14") == set()
+
+
+def test_partial_row_is_replaced_and_not_completed(tmp_path, monkeypatch):
+    daily = tmp_path / "daily.csv"
+    monkeypatch.setattr(rb, "DAILY", daily)
+    _write(daily, [_row("2026-07-13", "gemini", 3, overall=1.0)])
+
+    assert rb.completed_providers("2026-07-13") == set()
+
+    rb.append_daily([_row("2026-07-13", "gemini", 36, overall=0.86)])
+    with daily.open() as f:
+        rows = list(csv.DictReader(f))
+    assert rows[0]["n_graded"] == "36"
+    assert rows[0]["overall"] == "0.86"
+
+
+def test_partial_row_not_replaced_by_worse_partial(tmp_path, monkeypatch):
+    daily = tmp_path / "daily.csv"
+    monkeypatch.setattr(rb, "DAILY", daily)
+    _write(daily, [_row("2026-07-13", "gemini", 10)])
+
+    rb.append_daily([_row("2026-07-13", "gemini", 3)])
+    with daily.open() as f:
+        rows = list(csv.DictReader(f))
+    assert rows[0]["n_graded"] == "10"

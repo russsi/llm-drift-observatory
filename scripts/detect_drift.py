@@ -49,8 +49,14 @@ def _fl(v):
         return None
 
 
+MIN_VALID = 30  # keep in sync with run_battery.MIN_VALID
+
+
 def check_provider(rows: list, today: str) -> list:
-    """rows: all daily.csv rows for one provider, dates ascending."""
+    """rows: all daily.csv rows for one provider, dates ascending.
+    Partial days (quota ran out mid-battery) are not measurements —
+    they enter neither the baseline nor today's comparison."""
+    rows = [r for r in rows if int(r["n_graded"] or 0) >= MIN_VALID]
     todays = [r for r in rows if r["date"] == today]
     history = [r for r in rows if r["date"] < today]
     if not todays or len(history) < MIN_HISTORY:

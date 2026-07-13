@@ -73,6 +73,12 @@ configured for it.
    therefore reported with the same prominence as drops.
 6. **One day is noise.** The dashboard shows baselines and thresholds; nothing
    is called "drift" from a single bad day unless it clears the noise band.
+7. **Partial days are not measurements.** If a provider's daily quota runs out
+   mid-battery, fewer than 30 of 36 graded tasks means the day is excluded
+   from charts, baselines and alerts (the raw transcripts stay in the repo),
+   and a same-day rerun may replace it with a complete measurement. Scoring
+   3 lucky tasks as "100%" would be exactly the kind of lie this project
+   exists to avoid.
 
 ## Architecture
 

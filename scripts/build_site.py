@@ -27,6 +27,11 @@ def main() -> None:
                     r[k] = float(r[k]) if r[k] else None
                 for k in ("latency_p50_ms", "errors", "n_graded"):
                     r[k] = int(float(r[k])) if r[k] else 0
+                if r["n_graded"] < 30:  # partial day: not a measurement
+                    for k in ("overall", "math", "logic", "instructions", "code",
+                              "russian", "refusal", "stability"):
+                        r[k] = None
+                    r["latency_p50_ms"] = 0
                 rows.append(r)
     rows.sort(key=lambda r: (r["date"], r["provider"]))
 
