@@ -1,0 +1,45 @@
+name: Probe provider models
+
+# Maintenance tool: lists which models each configured key can actually
+# use, so watched aliases in scripts/providers.py can be pinned correctly.
+# Prints model names only — never secrets.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Gemini models
+        env:
+          KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          [ -z "$KEY" ] && echo "no key" && exit 0
+          curl -s -H "x-goog-api-key: $KEY" \
+            "https://generativelanguage.googleapis.com/v1beta/models?pageSize=100" \
+            | python3 -c "import json,sys; d=json.load(sys.stdin); [print(m['name'], '|', ','.join(m.get('supportedGenerationMethods',[]))) for m in d.get('models',[])] or print(d)" || true
+
+      - name: Cerebras models
+        env:
+          KEY: ${{ secrets.CEREBRAS_API_KEY }}
+        run: |
+          [ -z "$KEY" ] && echo "no key" && exit 0
+          curl -s -H "Authorization: Bearer $KEY" https://api.cerebras.ai/v1/models \
+            | python3 -c "import json,sys; d=json.load(sys.stdin); [print(m['id']) for m in d.get('data',[])] or print(d)" || true
+
+      - name: OpenRouter free-model check
+        env:
+          KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          [ -z "$KEY" ] && echo "no key" && exit 0
+          curl -s -o /dev/null -w "chat status: %{http_code}\n" \
+            https://openrouter.ai/api/v1/chat/completions \
+            -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+            -d '{"model":"meta-llama/llama-3.3-70b-instruct:free","messages":[{"role":"user","content":"Reply with OK"}],"max_tokens":5}'
+          curl -s https://openrouter.ai/api/v1/models \
+            | python3 -c "import json,sys; [print(m['id']) for m in json.load(sys.stdin).get('data',[]) if m['id'].endswith(':free')]" | head -30 || true
