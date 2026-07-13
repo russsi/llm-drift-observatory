@@ -1,0 +1,6 @@
+date,provider,battery_version,model_alias,model_reported,overall,math,logic,instructions,code,russian,refusal,stability,latency_p50_ms,errors,n_graded
+2026-07-13,groq,1,llama-3.3-70b-versatile,llama-3.3-70b-versatile,0.8333,0.8333,1.0,0.6667,0.8333,0.6667,1.0,,599,0,36
+2026-07-13,gemini,1,gemini-2.5-flash,,,,,,,,,,,39,0
+2026-07-13,mistral,1,mistral-small-latest,mistral-small-latest,0.8333,0.8333,1.0,0.5,1.0,0.6667,1.0,,859,0,36
+2026-07-13,openrouter,1,meta-llama/llama-3.3-70b-instruct:free,,,,,,,,,,,39,0
+2026-07-13,cerebras,1,llama-3.3-70b,,,,,,,,,,,39,0

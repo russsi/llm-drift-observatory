@@ -1,0 +1,219 @@
+{
+ "summary": {
+  "date": "2026-07-13",
+  "provider": "cerebras",
+  "battery_version": 1,
+  "model_alias": "llama-3.3-70b",
+  "model_reported": "",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 39,
+  "n_graded": 0
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "cerebras: HTTP 404: {\"message\":\"Model does not exist or you do not have access to it.\",\"type\":\"not_found_error\",\"param\":\"model\",\"code\":\"model_not_found\"}"
+  }
+ ]
+}

@@ -1,0 +1,219 @@
+{
+ "summary": {
+  "date": "2026-07-13",
+  "provider": "gemini",
+  "battery_version": 1,
+  "model_alias": "gemini-2.5-flash",
+  "model_reported": "",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 39,
+  "n_graded": 0
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "gemini: HTTP 404: {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-l"
+  }
+ ]
+}
