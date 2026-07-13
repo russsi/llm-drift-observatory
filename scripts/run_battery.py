@@ -31,7 +31,6 @@ FIELDS = (
     + CATEGORIES
     + ["stability", "latency_p50_ms", "errors", "n_graded"]
 )
-SLEEP_BETWEEN_CALLS = 2.5  # seconds; stays well under every free-tier RPM cap
 
 
 def load_battery() -> dict:
@@ -70,7 +69,7 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
             errors += 1
             records.append({"id": task["id"], "category": task["category"],
                             "error": str(e)[:300]})
-        time.sleep(SLEEP_BETWEEN_CALLS if provider != "mock" else 0)
+        time.sleep(providers.call_pause(provider))
 
     for probe in battery["stability_probes"]:
         try:
@@ -79,7 +78,7 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
         except providers.ProviderError as e:
             errors += 1
             probe_records.append({"id": probe["id"], "output": "", "error": str(e)[:300]})
-        time.sleep(SLEEP_BETWEEN_CALLS if provider != "mock" else 0)
+        time.sleep(providers.call_pause(provider))
 
     prev = previous_probe_texts(provider, today)
     sims = [
@@ -116,20 +115,34 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
     return summary
 
 
+def completed_providers(date: str) -> set:
+    """Providers that already have a real (graded) row for this date.
+    Error-only rows don't count, so a rerun can heal a failed provider."""
+    if not DAILY.exists():
+        return set()
+    with DAILY.open() as f:
+        return {r["provider"] for r in csv.DictReader(f)
+                if r["date"] == date and int(r["n_graded"] or 0) > 0}
+
+
 def append_daily(rows: list) -> None:
-    exists = DAILY.exists()
-    # never write two rows for the same provider+date (idempotent reruns)
-    seen = set()
-    if exists:
+    """One row per provider+date. A graded row is immutable; an error-only
+    row (n_graded == 0) may be replaced by a later successful rerun."""
+    existing = []
+    if DAILY.exists():
         with DAILY.open() as f:
-            seen = {(r["date"], r["provider"]) for r in csv.DictReader(f)}
-    with DAILY.open("a", newline="") as f:
+            existing = list(csv.DictReader(f))
+    by_key = {(r["date"], r["provider"]): r for r in existing}
+    for row in rows:
+        key = (row["date"], row["provider"])
+        old = by_key.get(key)
+        if old is None or (int(old["n_graded"] or 0) == 0 and row["n_graded"] > 0):
+            by_key[key] = {k: row[k] for k in FIELDS}
+    with DAILY.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
-        if not exists:
-            w.writeheader()
-        for row in rows:
-            if (row["date"], row["provider"]) not in seen:
-                w.writerow(row)
+        w.writeheader()
+        for key in sorted(by_key):
+            w.writerow(by_key[key])
 
 
 def main() -> None:
@@ -142,7 +155,12 @@ def main() -> None:
     if not active:
         raise SystemExit("No provider API keys configured (and DRIFT_MOCK not set).")
 
-    print(f"battery v{battery['version']}, providers: {', '.join(active)}")
+    done = completed_providers(args.date)
+    if done:
+        print(f"already graded today, skipping: {', '.join(sorted(done))}")
+        active = [p for p in active if p not in done]
+
+    print(f"battery v{battery['version']}, providers: {', '.join(active) or '(none left)'}")
     rows = []
     for p in active:
         print(f"→ {p} ...", flush=True)

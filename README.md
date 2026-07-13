@@ -37,10 +37,19 @@ Aliases are pinned on purpose — the experiment is whether behavior behind an
 unchanged name changes (see `scripts/providers.py`):
 
 - Groq — `llama-3.3-70b-versatile`
-- Google — `gemini-2.5-flash`
+- Google — `gemini-3.5-flash`
 - Mistral — `mistral-small-latest`
-- OpenRouter — `meta-llama/llama-3.3-70b-instruct:free`
-- Cerebras — `llama-3.3-70b`
+- OpenRouter — `openai/gpt-oss-120b:free`
+- Cerebras — `gpt-oss-120b`
+
+OpenRouter and Cerebras deliberately serve the *same* open-weights model:
+if those two lines diverge, the difference is serving infrastructure
+(quantization, sampling, batching), not the weights.
+
+Alias changelog: 2026-07-13 (before first graded run for these providers) —
+gemini `2.5-flash`→`3.5-flash` (key had no access), cerebras
+`llama-3.3-70b`→`gpt-oss-120b` (model retired), openrouter llama
+`3.3-70b:free`→`gpt-oss-120b:free` (persistent upstream congestion).
 
 A provider is skipped (recorded as absent, never as zero) if no API key is
 configured for it.

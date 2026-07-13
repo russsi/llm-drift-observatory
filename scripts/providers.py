@@ -24,9 +24,10 @@ PROVIDERS = {
     },
     "gemini": {
         "env": "GEMINI_API_KEY",
-        "model": "gemini-2.5-flash",
+        "model": "gemini-3.5-flash",
         "url": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
         "style": "gemini",
+        "sleep": 6.5,  # free tier is ~10 requests/minute
     },
     "mistral": {
         "env": "MISTRAL_API_KEY",
@@ -36,13 +37,15 @@ PROVIDERS = {
     },
     "openrouter": {
         "env": "OPENROUTER_API_KEY",
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        # same open-weights model as cerebras, different serving stack —
+        # if the two lines ever diverge, that's infrastructure, not weights
+        "model": "openai/gpt-oss-120b:free",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "style": "openai",
     },
     "cerebras": {
         "env": "CEREBRAS_API_KEY",
-        "model": "llama-3.3-70b",
+        "model": "gpt-oss-120b",
         "url": "https://api.cerebras.ai/v1/chat/completions",
         "style": "openai",
     },
@@ -51,6 +54,13 @@ PROVIDERS = {
 MAX_TOKENS = 1024
 TIMEOUT = 90
 RETRIES = 4
+DEFAULT_SLEEP = 2.5  # seconds between calls; per-provider override via "sleep"
+
+
+def call_pause(provider: str) -> float:
+    if provider == "mock":
+        return 0.0
+    return PROVIDERS[provider].get("sleep", DEFAULT_SLEEP)
 
 
 class ProviderError(Exception):
