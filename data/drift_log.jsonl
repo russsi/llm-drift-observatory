@@ -3,3 +3,8 @@
 {"date": "2026-07-13", "provider": "groq", "alerts": []}
 {"date": "2026-07-13", "provider": "mistral", "alerts": []}
 {"date": "2026-07-13", "provider": "openrouter", "alerts": []}
+{"date": "2026-07-13", "provider": "cerebras", "alerts": []}
+{"date": "2026-07-13", "provider": "gemini", "alerts": []}
+{"date": "2026-07-13", "provider": "groq", "alerts": []}
+{"date": "2026-07-13", "provider": "mistral", "alerts": []}
+{"date": "2026-07-13", "provider": "openrouter", "alerts": []}
