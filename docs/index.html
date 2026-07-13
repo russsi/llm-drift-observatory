@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Drift Observatory — daily evidence of silent model changes</title>
+<meta name="description" content="Every day, the same frozen benchmark battery is sent to the same free-tier LLM APIs and graded by deterministic code. If a provider silently changes the model behind a stable name, the line moves.">
+<style>
+:root {
+  --page: #f9f9f7; --surface: #fcfcfb;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --good: #006300; --bad: #d03b3b;
+  --s-groq: #2a78d6; --s-gemini: #1baf7a; --s-mistral: #eda100;
+  --s-openrouter: #008300; --s-cerebras: #4a3aa7; --s-mock: #e87ba4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0d0d0d; --surface: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --good: #0ca30c; --bad: #e66767;
+    --s-groq: #3987e5; --s-gemini: #199e70; --s-mistral: #c98500;
+    --s-openrouter: #008300; --s-cerebras: #9085e9; --s-mock: #d55181;
+  }
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--page); color: var(--ink);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 32px 16px 64px;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+h1 { font-size: 26px; letter-spacing: -0.02em; }
+.tagline { color: var(--ink-2); margin-top: 4px; max-width: 640px; }
+.meta { color: var(--muted); font-size: 13px; margin-top: 10px; }
+.meta a { color: inherit; }
+h2 { font-size: 16px; margin: 36px 0 4px; }
+.sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.card {
+  background: var(--surface); border: 1px solid var(--ring);
+  border-radius: 10px; padding: 16px;
+}
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 10px; margin-top: 20px; }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; }
+.tile .name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.tile .val { font-size: 26px; font-weight: 650; margin-top: 2px; }
+.tile .delta { font-size: 12.5px; }
+.tile .model { font-size: 11.5px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.up { color: var(--good); } .down { color: var(--bad); } .flat { color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 12px; }
+svg { display: block; width: 100%; height: auto; }
+svg text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--muted); }
+svg .dlabel { font-size: 11px; font-weight: 600; }
+.gridline { stroke: var(--grid); stroke-width: 1; }
+.baseline { stroke: var(--axis); stroke-width: 1; }
+#tooltip {
+  position: absolute; pointer-events: none; display: none; z-index: 10;
+  background: var(--surface); border: 1px solid var(--ring); border-radius: 8px;
+  padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
+  min-width: 130px;
+}
+#tooltip .tt-date { font-weight: 600; margin-bottom: 4px; }
+#tooltip .tt-row { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+#tooltip .tt-row b { margin-left: auto; color: var(--ink); font-variant-numeric: tabular-nums; }
+.alert { border-left: 3px solid var(--bad); padding: 8px 12px; margin-bottom: 8px; background: var(--surface); border-radius: 0 8px 8px 0; font-size: 13.5px; }
+.alert .when { color: var(--muted); font-size: 12px; }
+.quiet { color: var(--ink-2); font-size: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.overflow { overflow-x: auto; }
+.empty { padding: 40px; text-align: center; color: var(--muted); }
+footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--grid); padding-top: 16px; }
+footer a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>LLM Drift Observatory</h1>
+    <p class="tagline">Every day, the same frozen battery of 36 tasks is sent to the same free-tier
+    LLM APIs and graded by deterministic code — no LLM judges. If a provider silently changes the
+    model behind a stable name, the line moves. Nobody can recreate this history later.</p>
+    <p class="meta" id="meta">loading…</p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Overall accuracy</h2>
+  <p class="sub">Share of the 36 graded tasks passed, per provider per day. Temperature 0, fixed prompts, battery published in the repo.</p>
+  <div class="legend" id="legend-main"></div>
+  <div class="card"><div id="chart-main"></div></div>
+
+  <h2>By category</h2>
+  <p class="sub">Six tasks per category. A drop in one category with others flat is the classic quantization / new-safety-filter signature.</p>
+  <div class="grid2" id="cats"></div>
+
+  <h2>Latency &amp; consistency</h2>
+  <div class="grid2">
+    <div class="card"><div class="sub" style="margin-bottom:6px">Median latency, ms</div><div id="chart-lat"></div></div>
+    <div class="card"><div class="sub" style="margin-bottom:6px">Same-prompt similarity vs previous day (temp 0)</div><div id="chart-stab"></div></div>
+  </div>
+
+  <h2>Drift alerts</h2>
+  <p class="sub">Raised only after ≥5 days of baseline and only beyond max(2σ, 0.12). False alarms stay on this record.</p>
+  <div id="alerts"></div>
+
+  <h2>Latest scores</h2>
+  <div class="card overflow"><table id="latest"></table></div>
+
+  <footer>
+    Method: frozen public battery · deterministic grading · scores never recomputed ·
+    misses recorded like hits. Source, raw daily transcripts and methodology:
+    <a id="repo-link" href="https://github.com/russsi/llm-drift-observatory">GitHub repository</a>.
+  </footer>
+</div>
+<div id="tooltip"></div>
+
+<script>
+const CAT_LABELS = { math:"Math", logic:"Logic", instructions:"Instruction following",
+  code:"Code", russian:"Russian", refusal:"Answered (not over-refused)" };
+const color = p => getComputedStyle(document.documentElement)
+  .getPropertyValue("--s-" + p).trim() || "#888";
+const pct = v => v == null ? "–" : Math.round(v * 100) + "%";
+
+async function boot() {
+  let data;
+  try { data = await (await fetch("data.json?t=" + Date.now())).json(); }
+  catch (e) { document.getElementById("meta").textContent = "data.json not found — first run pending"; return; }
+
+  const { providers, rows, models, alerts } = data;
+  const dates = [...new Set(rows.map(r => r.date))].sort();
+  document.getElementById("meta").innerHTML =
+    `Updated ${data.generated_utc} · battery v${data.battery_version} · ${dates.length} day${dates.length===1?"":"s"} of history · runs unattended via GitHub Actions`;
+
+  const byProv = {};
+  providers.forEach(p => byProv[p] = rows.filter(r => r.provider === p));
+
+  // --- stat tiles ---
+  const tiles = document.getElementById("tiles");
+  providers.forEach(p => {
+    const rs = byProv[p], last = rs[rs.length - 1];
+    if (!last) return;
+    const prior = rs.slice(0, -1).slice(-7).map(r => r.overall).filter(v => v != null);
+    let deltaHtml = `<span class="flat">baseline forming</span>`;
+    if (prior.length >= 3 && last.overall != null) {
+      const mean = prior.reduce((a,b)=>a+b,0) / prior.length;
+      const d = last.overall - mean;
+      const cls = Math.abs(d) < 0.02 ? "flat" : d > 0 ? "up" : "down";
+      const arrow = Math.abs(d) < 0.02 ? "→" : d > 0 ? "↑" : "↓";
+      deltaHtml = `<span class="${cls}">${arrow} ${(d>=0?"+":"")}${(d*100).toFixed(1)} pp vs 7-day mean</span>`;
+    }
+    tiles.insertAdjacentHTML("beforeend", `
+      <div class="tile">
+        <div class="name"><span class="dot" style="background:${color(p)}"></span>${p}</div>
+        <div class="val">${pct(last.overall)}</div>
+        <div class="delta">${deltaHtml}</div>
+        <div class="model" title="${models[p]||""}">${models[p]||""}</div>
+      </div>`);
+  });
+
+  // --- legend ---
+  document.getElementById("legend-main").innerHTML = providers.map(p =>
+    `<span><span class="dot" style="background:${color(p)}"></span>${p}</span>`).join("");
+
+  const seriesOf = key => providers.map(p => ({
+    name: p, color: color(p),
+    points: dates.map(d => { const r = byProv[p].find(x => x.date === d);
+      return r && r[key] != null ? r[key] : null; })
+  }));
+
+  lineChart("#chart-main", dates, seriesOf("overall"), {h:280, ymin:0, ymax:1, fmt:pct});
+
+  const cats = document.getElementById("cats");
+  Object.keys(CAT_LABELS).forEach(cat => {
+    const id = "cat-" + cat;
+    cats.insertAdjacentHTML("beforeend",
+      `<div class="card"><div class="sub" style="margin-bottom:6px">${CAT_LABELS[cat]}</div><div id="${id}"></div></div>`);
+    lineChart("#" + id, dates, seriesOf(cat), {h:150, ymin:0, ymax:1, fmt:pct, small:true});
+  });
+
+  lineChart("#chart-lat", dates, seriesOf("latency_p50_ms"), {h:170, ymin:0, fmt:v=>v==null?"–":Math.round(v)+" ms", small:true});
+  lineChart("#chart-stab", dates, seriesOf("stability"), {h:170, ymin:0, ymax:1, fmt:v=>v==null?"–":v.toFixed(2), small:true});
+
+  // --- alerts ---
+  const al = document.getElementById("alerts");
+  if (!alerts.length) {
+    al.innerHTML = `<p class="quiet">No drift detected so far${dates.length<6?" (baseline still forming — alerts need ≥5 days of history)":""}.</p>`;
+  } else {
+    [...alerts].reverse().forEach(e => e.alerts.forEach(a => {
+      const detail = Object.entries(a).filter(([k]) => k!=="type")
+        .map(([k,v]) => `${k}: ${v}`).join(" · ");
+      al.insertAdjacentHTML("beforeend",
+        `<div class="alert"><b>${e.provider}</b> — ${a.type.replace(/_/g," ")}
+         <div class="when">${e.date} · ${detail}</div></div>`);
+    }));
+  }
+
+  // --- latest table ---
+  const lastDate = dates[dates.length - 1];
+  const cols = ["overall", ...Object.keys(CAT_LABELS), "latency_p50_ms"];
+  const head = `<tr><th>provider (${lastDate||"no data"})</th>` +
+    cols.map(c => `<th>${c === "latency_p50_ms" ? "p50 ms" : c}</th>`).join("") + "</tr>";
+  const body = providers.map(p => {
+    const r = byProv[p].find(x => x.date === lastDate);
+    if (!r) return "";
+    return `<tr><td><span class="dot" style="background:${color(p)};display:inline-block;margin-right:6px"></span>${p}</td>` +
+      cols.map(c => `<td>${c==="latency_p50_ms" ? (r[c]||"–") : pct(r[c])}</td>`).join("") + "</tr>";
+  }).join("");
+  document.getElementById("latest").innerHTML = head + body;
+
+}
+
+// ---- hand-rolled SVG line chart with crosshair tooltip ----
+function lineChart(sel, dates, series, opt) {
+  const host = document.querySelector(sel);
+  const W = 900, H = opt.h, padL = 44, padR = opt.small ? 14 : 86, padT = 10, padB = 26;
+  const iw = W - padL - padR, ih = H - padT - padB;
+  const n = dates.length;
+  if (!n) { host.innerHTML = `<div class="empty">No data yet — first daily run pending.</div>`; return; }
+
+  let ymin = opt.ymin ?? 0, ymax = opt.ymax;
+  if (ymax == null) {
+    const all = series.flatMap(s => s.points).filter(v => v != null);
+    ymax = all.length ? Math.max(...all) * 1.15 : 1;
+  }
+  const x = i => padL + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
+  const y = v => padT + ih - ((v - ymin) / (ymax - ymin || 1)) * ih;
+
+  let g = "";
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const v = ymin + (t / ticks) * (ymax - ymin), yy = y(v);
+    g += `<line class="${t===0?"baseline":"gridline"}" x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}"/>` +
+         `<text x="${padL-8}" y="${yy+4}" text-anchor="end">${opt.fmt(v)}</text>`;
+  }
+  const step = Math.max(1, Math.ceil(n / 8));
+  for (let i = 0; i < n; i += step)
+    g += `<text x="${x(i)}" y="${H-8}" text-anchor="middle">${dates[i].slice(5)}</text>`;
+
+  series.forEach(s => {
+    const pts = s.points.map((v,i) => v==null ? null : [x(i), y(v)]).filter(Boolean);
+    if (pts.length > 1)
+      g += `<path d="M${pts.map(p=>p.map(c=>c.toFixed(1)).join(",")).join(" L")}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>`;
+    pts.forEach(p => g += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${pts.length>14?2:3.5}" fill="${s.color}"/>`);
+    if (!opt.small && pts.length) {
+      const lastIdx = s.points.map((v,i)=>v==null?null:i).filter(v=>v!=null).pop();
+      g += `<text class="dlabel" x="${x(lastIdx)+8}" y="${y(s.points[lastIdx])+4}" fill="${s.color}" style="fill:${s.color}">${s.name}</text>`;
+    }
+  });
+  g += `<line id="xh" x1="0" x2="0" y1="${padT}" y2="${padT+ih}" stroke="var(--axis)" stroke-dasharray="3,3" visibility="hidden"/>`;
+
+  host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="line chart">${g}</svg>`;
+
+  const svg = host.querySelector("svg"), xh = svg.querySelector("#xh"), tt = document.getElementById("tooltip");
+  svg.addEventListener("mousemove", ev => {
+    const rect = svg.getBoundingClientRect();
+    const mx = (ev.clientX - rect.left) / rect.width * W;
+    let i = n === 1 ? 0 : Math.round((mx - padL) / iw * (n - 1));
+    i = Math.max(0, Math.min(n - 1, i));
+    xh.setAttribute("x1", x(i)); xh.setAttribute("x2", x(i));
+    xh.setAttribute("visibility", "visible");
+    tt.style.display = "block";
+    tt.innerHTML = `<div class="tt-date">${dates[i]}</div>` + series.map(s =>
+      `<div class="tt-row"><span class="dot" style="background:${s.color}"></span>${s.name}<b>${opt.fmt(s.points[i])}</b></div>`).join("");
+    const px = ev.pageX + 14, py = ev.pageY + 14;
+    tt.style.left = Math.min(px, document.documentElement.clientWidth - tt.offsetWidth - 12) + "px";
+    tt.style.top = py + "px";
+  });
+  svg.addEventListener("mouseleave", () => {
+    xh.setAttribute("visibility", "hidden");
+    document.getElementById("tooltip").style.display = "none";
+  });
+}
+boot();
+</script>
+</body>
+</html>

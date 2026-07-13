@@ -1,0 +1,59 @@
+name: Daily battery run
+
+# The whole observatory: ask every watched model the frozen battery,
+# grade, detect drift (opens an issue on alerts), rebuild the site,
+# commit results. Providers without a configured key are skipped.
+
+on:
+  schedule:
+    - cron: '47 5 * * *'   # daily 05:47 UTC (off the top of the hour)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: daily-run
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run battery
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+        run: python -m scripts.run_battery
+
+      - name: Detect drift
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m scripts.detect_drift
+
+      - name: Rebuild site data
+        run: python -m scripts.build_site
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ docs/data.json
+          git diff --cached --quiet || git commit -m "daily run $(date -u +%F)"
+          git push
