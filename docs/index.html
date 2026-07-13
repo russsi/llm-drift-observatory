@@ -75,6 +75,28 @@ th:first-child, td:first-child { text-align: left; }
 th { color: var(--muted); font-weight: 600; font-size: 12px; }
 .overflow { overflow-x: auto; }
 .empty { padding: 40px; text-align: center; color: var(--muted); }
+.tile .model a { color: inherit; text-decoration: none; }
+.tile .model a:hover { text-decoration: underline; color: var(--ink-2); }
+.zoom { cursor: zoom-in; }
+.zoom:hover { border-color: var(--axis); }
+#modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.45); z-index: 20; padding: 16px; }
+#modal-card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px;
+  padding: 18px 20px; width: min(960px, 96vw); position: relative; }
+#modal-close { position: absolute; top: 8px; right: 12px; background: none; border: none;
+  color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; }
+#modal-close:hover, #modal-close:focus { color: var(--ink); }
+#modal-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+details.batcat { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
+  padding: 10px 14px; margin-bottom: 8px; }
+details.batcat summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+details.batcat summary:hover { color: var(--ink-2); }
+.task { padding: 8px 0 8px 2px; border-bottom: 1px solid var(--grid); font-size: 13.5px;
+  color: var(--ink-2); display: flex; gap: 10px; align-items: baseline; }
+.task:last-child { border-bottom: none; }
+.tid { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; flex: none; width: 66px; }
+.chip { margin-left: auto; flex: none; font-size: 11px; color: var(--muted);
+  border: 1px solid var(--grid); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
 footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--grid); padding-top: 16px; }
 footer a { color: var(--ink-2); }
 </style>
@@ -102,8 +124,8 @@ footer a { color: var(--ink-2); }
 
   <h2>Latency &amp; consistency</h2>
   <div class="grid2">
-    <div class="card"><div class="sub" style="margin-bottom:6px">Median latency, ms</div><div id="chart-lat"></div></div>
-    <div class="card"><div class="sub" style="margin-bottom:6px">Same-prompt similarity vs previous day (temp 0)</div><div id="chart-stab"></div></div>
+    <div class="card zoom" id="card-lat" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">Median latency, ms</div><div id="chart-lat"></div></div>
+    <div class="card zoom" id="card-stab" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">Same-prompt similarity vs previous day (temp 0)</div><div id="chart-stab"></div></div>
   </div>
 
   <h2>Drift alerts</h2>
@@ -113,6 +135,12 @@ footer a { color: var(--ink-2); }
   <h2>Latest scores</h2>
   <div class="card overflow"><table id="latest"></table></div>
 
+  <h2>The battery — every task, in the open</h2>
+  <p class="sub">Frozen since day one: tasks are never edited or removed once live (new ones only under a
+  bumped version). Every answer is graded by deterministic code — the grader type is shown per task;
+  expected answers and grading source are in the repo for audit.</p>
+  <div id="battery"></div>
+
   <footer>
     Method: frozen public battery · deterministic grading · scores never recomputed ·
     misses recorded like hits. Source, raw daily transcripts and methodology:
@@ -120,10 +148,26 @@ footer a { color: var(--ink-2); }
   </footer>
 </div>
 <div id="tooltip"></div>
+<div id="modal" role="dialog" aria-modal="true">
+  <div id="modal-card">
+    <button id="modal-close" aria-label="Close">×</button>
+    <div id="modal-title"></div>
+    <div class="legend" id="modal-legend"></div>
+    <div id="modal-chart"></div>
+  </div>
+</div>
 
 <script>
 const CAT_LABELS = { math:"Math", logic:"Logic", instructions:"Instruction following",
   code:"Code", russian:"Russian", refusal:"Answered (not over-refused)" };
+const MODEL_LINKS = {
+  groq: "https://console.groq.com/docs/models",
+  gemini: "https://ai.google.dev/gemini-api/docs/models",
+  mistral: "https://docs.mistral.ai/getting-started/models/",
+  openrouter: "https://openrouter.ai/meta-llama/llama-3.3-70b-instruct:free",
+  cerebras: "https://inference-docs.cerebras.ai/models/overview",
+};
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const color = p => getComputedStyle(document.documentElement)
   .getPropertyValue("--s-" + p).trim() || "#888";
 const pct = v => v == null ? "–" : Math.round(v * 100) + "%";
@@ -160,7 +204,11 @@ async function boot() {
         <div class="name"><span class="dot" style="background:${color(p)}"></span>${p}</div>
         <div class="val">${pct(last.overall)}</div>
         <div class="delta">${deltaHtml}</div>
-        <div class="model" title="${models[p]||""}">${models[p]||""}</div>
+        <div class="model" title="${models[p]||""}">${
+          MODEL_LINKS[p]
+            ? `<a href="${MODEL_LINKS[p]}" target="_blank" rel="noopener">${models[p]||p} ↗</a>`
+            : (models[p]||"")
+        }</div>
       </div>`);
   });
 
@@ -180,12 +228,31 @@ async function boot() {
   Object.keys(CAT_LABELS).forEach(cat => {
     const id = "cat-" + cat;
     cats.insertAdjacentHTML("beforeend",
-      `<div class="card"><div class="sub" style="margin-bottom:6px">${CAT_LABELS[cat]}</div><div id="${id}"></div></div>`);
+      `<div class="card zoom" id="card-${cat}" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">${CAT_LABELS[cat]}</div><div id="${id}"></div></div>`);
     lineChart("#" + id, dates, seriesOf(cat), {h:150, ymin:0, ymax:1, fmt:pct, small:true});
+    document.getElementById("card-" + cat).addEventListener("click", () =>
+      openModal(CAT_LABELS[cat], providers, dates, seriesOf(cat), {h:340, ymin:0, ymax:1, fmt:pct}));
   });
 
   lineChart("#chart-lat", dates, seriesOf("latency_p50_ms"), {h:170, ymin:0, fmt:v=>v==null?"–":Math.round(v)+" ms", small:true});
   lineChart("#chart-stab", dates, seriesOf("stability"), {h:170, ymin:0, ymax:1, fmt:v=>v==null?"–":v.toFixed(2), small:true});
+  document.getElementById("card-lat").addEventListener("click", () =>
+    openModal("Median latency, ms", providers, dates, seriesOf("latency_p50_ms"), {h:340, ymin:0, fmt:v=>v==null?"–":Math.round(v)+" ms"}));
+  document.getElementById("card-stab").addEventListener("click", () =>
+    openModal("Same-prompt similarity vs previous day (temp 0)", providers, dates, seriesOf("stability"), {h:340, ymin:0, ymax:1, fmt:v=>v==null?"–":v.toFixed(2)}));
+
+  // --- the battery, in the open ---
+  if (data.battery && data.battery.length) {
+    const bat = document.getElementById("battery");
+    Object.keys(CAT_LABELS).forEach(cat => {
+      const ts = data.battery.filter(t => t.category === cat);
+      if (!ts.length) return;
+      bat.insertAdjacentHTML("beforeend", `<details class="batcat">
+        <summary>${CAT_LABELS[cat]} — ${ts.length} tasks</summary>
+        ${ts.map(t => `<div class="task"><span class="tid">${t.id}</span><span>${esc(t.prompt)}</span><span class="chip">${t.grader.type}</span></div>`).join("")}
+      </details>`);
+    });
+  }
 
   // --- alerts ---
   const al = document.getElementById("alerts");
@@ -215,6 +282,23 @@ async function boot() {
   document.getElementById("latest").innerHTML = head + body;
 
 }
+
+// ---- enlarge-chart modal ----
+const modal = document.getElementById("modal");
+function openModal(title, providers, dates, series, opt) {
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-legend").innerHTML = series.map(s =>
+    `<span><span class="dot" style="background:${s.color}"></span>${s.name}</span>`).join("");
+  modal.style.display = "flex";
+  lineChart("#modal-chart", dates, series, opt);
+}
+function closeModal() {
+  modal.style.display = "none";
+  document.getElementById("tooltip").style.display = "none";
+}
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
 // ---- hand-rolled SVG line chart with crosshair tooltip ----
 function lineChart(sel, dates, series, opt) {

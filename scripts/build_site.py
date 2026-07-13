@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "data" / "daily.csv"
 LOG = ROOT / "data" / "drift_log.jsonl"
+BATTERY = ROOT / "battery" / "tasks.json"
 OUT = ROOT / "docs" / "data.json"
 
 # Fixed display order = fixed palette slot per provider (never reassigned).
@@ -45,6 +46,13 @@ def main() -> None:
     for r in rows:
         models[r["provider"]] = r["model_alias"]
 
+    battery = json.loads(BATTERY.read_text())
+    tasks_pub = [
+        {"id": t["id"], "category": t["category"], "prompt": t["prompt"],
+         "grader": {"type": t["grader"]["type"]}}
+        for t in battery["tasks"]
+    ]
+
     OUT.write_text(json.dumps({
         "generated_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "battery_version": rows[-1]["battery_version"] if rows else "1",
@@ -52,6 +60,7 @@ def main() -> None:
         "models": models,
         "rows": rows,
         "alerts": alerts,
+        "battery": tasks_pub,
     }, ensure_ascii=False))
     print(f"wrote {OUT.relative_to(ROOT)}: {len(rows)} rows, {len(alerts)} alert days")
 
