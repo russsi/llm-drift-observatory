@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 import random
+import re
 import time
 
 import requests
@@ -43,11 +44,14 @@ PROVIDERS = {
         "url": "https://api.mistral.ai/v1/chat/completions",
         "style": "openai",
     },
-    "openrouter": {
+    # "openrouter" (openai/gpt-oss-120b:free) died 2026-07-14: OpenRouter
+    # moved the model to paid-only. Per the alias-death policy the series
+    # ended; "openrouter-llama" below is its successor, a new series.
+    "openrouter-llama": {
         "env": "OPENROUTER_API_KEY",
-        # same open-weights model as cerebras, different serving stack —
-        # if the two lines ever diverge, that's infrastructure, not weights
-        "model": "openai/gpt-oss-120b:free",
+        # same open-weights model as groq's llama-3.3-70b-versatile, second
+        # serving stack — if the two lines diverge, that's infrastructure
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "style": "openai",
     },
@@ -56,6 +60,8 @@ PROVIDERS = {
         "model": "gpt-oss-120b",
         "url": "https://api.cerebras.ai/v1/chat/completions",
         "style": "openai",
+        "sleep": 3.5,  # median latency is sub-second, so the default pace
+        # of ~1 call/3s brushes the free tier's per-minute request limit
     },
 }
 
@@ -75,6 +81,22 @@ class ProviderError(Exception):
     pass
 
 
+def is_daily_quota_error(err: str) -> bool:
+    """True only for a 429 that explicitly names a per-DAY window.
+
+    Providers wrap every rate limit in quota language: cerebras sends
+    '"param":"quota"' for a per-MINUTE limit, gemini says 'check your plan
+    and billing details' for both. Treating those as daily exhaustion made
+    us stop retrying and abort whole runs (2026-07-14: killed cerebras and
+    gemini days that a 20-second wait would have healed). A per-minute 429
+    is retryable; only an explicit day window is worth giving up on.
+    """
+    if "429" not in err:
+        return False
+    squeezed = re.sub(r"[\s_-]", "", err.lower())
+    return "perday" in squeezed or "daily" in squeezed
+
+
 def available_providers() -> list:
     if os.environ.get("DRIFT_MOCK"):
         return ["mock"]
@@ -91,7 +113,7 @@ def _call_openai_style(cfg: dict, prompt: str) -> dict:
     }
     r = requests.post(cfg["url"], json=body, headers=headers, timeout=TIMEOUT)
     if r.status_code != 200:
-        raise ProviderError(f"HTTP {r.status_code}: {r.text[:300]}")
+        raise ProviderError(f"HTTP {r.status_code}: {r.text[:800]}")
     data = r.json()
     return {
         "text": data["choices"][0]["message"]["content"] or "",
@@ -109,7 +131,7 @@ def _call_gemini(cfg: dict, prompt: str) -> dict:
     }
     r = requests.post(url, json=body, headers=headers, timeout=TIMEOUT)
     if r.status_code != 200:
-        raise ProviderError(f"HTTP {r.status_code}: {r.text[:300]}")
+        raise ProviderError(f"HTTP {r.status_code}: {r.text[:800]}")
     data = r.json()
     try:
         parts = data["candidates"][0]["content"]["parts"]
@@ -160,12 +182,15 @@ def ask(provider: str, prompt: str) -> dict:
         except (ProviderError, requests.RequestException) as e:
             last_err = e
             msg = str(e)
-            # 4xx other than 429 won't heal on retry; neither will a daily
-            # quota 429 — retrying it just burns backoff time (and possibly
-            # more quota)
+            # 4xx other than 429 won't heal on retry; neither will a 429
+            # that names a per-day quota — retrying it just burns backoff
+            # time. Any other 429 is a per-minute window: wait it out.
             if msg.startswith("HTTP 4") and not msg.startswith("HTTP 429"):
                 break
-            if msg.startswith("HTTP 429") and ("quota" in msg.lower() or "billing" in msg.lower()):
-                break
-            time.sleep((2 ** attempt) * 3 + random.random())
+            if msg.startswith("HTTP 429"):
+                if is_daily_quota_error(msg):
+                    break
+                time.sleep(max((2 ** attempt) * 3, 20) + random.random())
+            else:
+                time.sleep((2 ** attempt) * 3 + random.random())
     raise ProviderError(f"{provider}: {last_err}")

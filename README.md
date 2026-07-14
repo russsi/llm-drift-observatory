@@ -40,13 +40,13 @@ unchanged name changes (see `scripts/providers.py`):
 - Groq — `openai/gpt-oss-120b` (series `groq-oss`)
 - Google — `gemini-3.5-flash`
 - Mistral — `mistral-small-latest`
-- OpenRouter — `openai/gpt-oss-120b:free`
+- OpenRouter — `meta-llama/llama-3.3-70b-instruct:free` (series `openrouter-llama`)
 - Cerebras — `gpt-oss-120b`
 
-Groq, OpenRouter and Cerebras deliberately serve the *same* open-weights
-model (gpt-oss-120b): identical weights on three serving stacks. If those
-lines diverge, the difference is infrastructure (quantization, sampling,
-batching), not the weights.
+Two same-weights pairs run on purpose: gpt-oss-120b on Groq + Cerebras,
+and llama-3.3-70b on Groq + OpenRouter — identical weights on different
+serving stacks. If a pair's lines diverge, the difference is
+infrastructure (quantization, sampling, batching), not the weights.
 
 ## When a watched alias dies mid-record
 
@@ -68,6 +68,18 @@ silently re-pointed at different weights, because the series *is* the claim
   observe drift. Done at the cheapest possible moment; v1 day-1 data stays
   in the repo, marked `battery_version=1`, and never mixes with v2 charts
   or baselines. Also added: `groq-oss` series (third stack for gpt-oss-120b).
+- 2026-07-14: **`openrouter` series died on v2 day one** — OpenRouter moved
+  `openai/gpt-oss-120b:free` to paid-only (HTTP 404: "This model is
+  unavailable for free"). Exactly the kind of silent free-tier change this
+  project watches for; the failed day stays in the repo as the record.
+  Successor series `openrouter-llama` (`meta-llama/llama-3.3-70b-instruct:free`)
+  starts from day zero and pairs with groq's llama-3.3-70b as a second
+  same-weights comparison.
+- 2026-07-15: retry/abort logic fixed — per-*minute* 429s (which cerebras
+  and gemini both phrase in quota/billing language) were being treated as
+  daily exhaustion, aborting runs a 20-second wait would have healed.
+  Cost cerebras and gemini their 2026-07-14 measurements. Only a 429 that
+  explicitly names a per-day window ends a run now.
 
 A provider is skipped (recorded as absent, never as zero) if no API key is
 configured for it.

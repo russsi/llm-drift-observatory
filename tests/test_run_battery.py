@@ -78,3 +78,18 @@ def test_partial_row_not_replaced_by_worse_partial(tmp_path, monkeypatch):
     with daily.open() as f:
         rows = list(csv.DictReader(f))
     assert rows[0]["n_graded"] == "10"
+
+
+def test_append_daily_reports_accepted_rows(tmp_path, monkeypatch):
+    """Raw transcripts are written only for accepted rows, so a worse rerun
+    must come back as not-accepted (2026-07-14: a 0-graded gemini rerun
+    overwrote the raw file behind the 22-graded row)."""
+    daily = tmp_path / "daily.csv"
+    monkeypatch.setattr(rb, "DAILY", daily)
+    _write(daily, [_row("2026-07-14", "gemini", 22)])
+
+    accepted = rb.append_daily([
+        _row("2026-07-14", "gemini", 0),               # worse rerun
+        _row("2026-07-14", "groq", 36, overall=0.7),   # fresh complete day
+    ])
+    assert accepted == {("2026-07-14", "groq")}

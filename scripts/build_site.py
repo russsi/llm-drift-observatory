@@ -16,7 +16,8 @@ BATTERY = ROOT / "battery" / "tasks.json"
 OUT = ROOT / "docs" / "data.json"
 
 # Fixed display order = fixed palette slot per provider (never reassigned).
-PROVIDER_ORDER = ["groq", "gemini", "mistral", "openrouter", "cerebras", "groq-oss", "mock"]
+PROVIDER_ORDER = ["groq", "gemini", "mistral", "openrouter", "openrouter-llama",
+                  "cerebras", "groq-oss", "mock"]
 
 SCORE_KEYS = ("overall", "math", "logic", "instructions", "code",
               "russian", "refusal", "stability")

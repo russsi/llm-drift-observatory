@@ -28,8 +28,8 @@ DAILY = ROOT / "data" / "daily.csv"
 BATTERY = ROOT / "battery" / "tasks.json"
 
 CATEGORIES = ["math", "logic", "instructions", "code", "russian", "refusal"]
-# after this many consecutive exhausted-quota errors, stop calling — the
-# remaining tasks would all fail the same way
+# after this many consecutive 429s that survived the full retry/backoff
+# cycle, stop calling — the remaining tasks would all fail the same way
 QUOTA_ABORT_AFTER = 3
 FIELDS = (
     ["date", "provider", "battery_version", "model_alias", "model_reported", "overall"]
@@ -44,6 +44,8 @@ def load_battery() -> dict:
 
 def previous_probe_texts(provider: str, today: str) -> dict:
     """Most recent raw file before today, for stability comparison."""
+    if not RESULTS.exists():
+        return {}
     days = sorted(d.name for d in RESULTS.iterdir() if d.is_dir() and d.name < today)
     for day in reversed(days):
         f = RESULTS / day / f"{provider}.json"
@@ -51,11 +53,6 @@ def previous_probe_texts(provider: str, today: str) -> dict:
             raw = json.loads(f.read_text())
             return {p["id"]: p["output"] for p in raw.get("stability_probes", [])}
     return {}
-
-
-def _is_quota_error(err: str) -> bool:
-    low = err.lower()
-    return "429" in low and ("quota" in low or "billing" in low)
 
 
 def run_provider(provider: str, battery: dict, today: str) -> dict:
@@ -67,7 +64,7 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
         if quota_streak >= QUOTA_ABORT_AFTER:
             errors += 1
             records.append({"id": task["id"], "category": task["category"],
-                            "error": "skipped: daily quota exhausted"})
+                            "error": "skipped: persistent 429s (quota or rate limit)"})
             continue
         prompt = task["prompt"] + (suffix if task["use_answer_suffix"] else "")
         try:
@@ -84,10 +81,13 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
             quota_streak = 0
         except providers.ProviderError as e:
             errors += 1
-            err = str(e)[:300]
+            err = str(e)[:800]
             records.append({"id": task["id"], "category": task["category"],
                             "error": err})
-            quota_streak = quota_streak + 1 if _is_quota_error(err) else 0
+            # a 429 here already survived the full retry/backoff cycle (or
+            # named a per-day quota), so a streak of them means the rest of
+            # the battery would fail the same way
+            quota_streak = quota_streak + 1 if "HTTP 429" in err else 0
         time.sleep(providers.call_pause(provider))
 
     for probe in battery["stability_probes"]:
@@ -128,12 +128,19 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
         "n_graded": len(graded),
     }
 
-    day_dir = RESULTS / today
+    # raw transcripts are written by main() only if append_daily accepts
+    # the row — a heal rerun that graded *less* must not clobber the raw
+    # file backing the better row already in the CSV (happened 2026-07-14:
+    # a 0-graded gemini rerun overwrote the 22-graded transcripts)
+    return {"summary": summary, "tasks": records, "stability_probes": probe_records}
+
+
+def write_raw(payload: dict) -> None:
+    s = payload["summary"]
+    day_dir = RESULTS / s["date"]
     day_dir.mkdir(parents=True, exist_ok=True)
-    (day_dir / f"{provider}.json").write_text(json.dumps({
-        "summary": summary, "tasks": records, "stability_probes": probe_records,
-    }, ensure_ascii=False, indent=1))
-    return summary
+    (day_dir / f"{s['provider']}.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=1))
 
 
 def completed_providers(date: str) -> set:
@@ -146,26 +153,30 @@ def completed_providers(date: str) -> set:
                 if r["date"] == date and int(r["n_graded"] or 0) >= MIN_VALID}
 
 
-def append_daily(rows: list) -> None:
+def append_daily(rows: list) -> set:
     """One row per provider+date. A complete row (n_graded >= MIN_VALID) is
     immutable; a partial or error-only row may be replaced by a rerun that
-    graded strictly more tasks."""
+    graded strictly more tasks. Returns the (date, provider) keys accepted,
+    so the caller persists raw transcripts only for rows that count."""
     existing = []
     if DAILY.exists():
         with DAILY.open() as f:
             existing = list(csv.DictReader(f))
     by_key = {(r["date"], r["provider"]): r for r in existing}
+    accepted = set()
     for row in rows:
         key = (row["date"], row["provider"])
         old = by_key.get(key)
         old_n = int(old["n_graded"] or 0) if old else -1
         if old is None or (old_n < MIN_VALID and row["n_graded"] > old_n):
             by_key[key] = {k: row[k] for k in FIELDS}
+            accepted.add(key)
     with DAILY.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         for key in sorted(by_key):
             w.writerow(by_key[key])
+    return accepted
 
 
 def main() -> None:
@@ -184,7 +195,7 @@ def main() -> None:
         active = [p for p in active if p not in done]
 
     print(f"battery v{battery['version']}, providers: {', '.join(active) or '(none left)'}")
-    rows = []
+    payloads = []
     if active:
         # providers have independent rate limits, so they run in parallel;
         # pacing between calls to the SAME provider is preserved inside
@@ -192,11 +203,18 @@ def main() -> None:
         with ThreadPoolExecutor(max_workers=len(active)) as pool:
             futures = {p: pool.submit(run_provider, p, battery, args.date) for p in active}
             for p, fut in futures.items():
-                row = fut.result()
-                rows.append(row)
+                payloads.append(fut.result())
+                row = payloads[-1]["summary"]
                 print(f"{p}: overall={row['overall']} errors={row['errors']}", flush=True)
-    append_daily(rows)
-    print(f"done: {len(rows)} provider(s) recorded for {args.date}")
+    accepted = append_daily([pl["summary"] for pl in payloads])
+    for pl in payloads:
+        s = pl["summary"]
+        if (s["date"], s["provider"]) in accepted:
+            write_raw(pl)
+        else:
+            print(f"{s['provider']}: rerun graded no more than the existing "
+                  f"row — row and raw transcripts kept from the earlier run")
+    print(f"done: {len(accepted)} provider(s) recorded for {args.date}")
 
 
 if __name__ == "__main__":
