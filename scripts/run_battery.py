@@ -79,9 +79,10 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
             })
             latencies.append(resp["latency_ms"])
             quota_streak = 0
-        except providers.ProviderError as e:
+        except Exception as e:  # any per-task failure is an error record,
+            # never a crashed provider — a crash would cost the whole day
             errors += 1
-            err = str(e)[:800]
+            err = (str(e) or type(e).__name__)[:800]
             records.append({"id": task["id"], "category": task["category"],
                             "error": err})
             # a 429 here already survived the full retry/backoff cycle (or
@@ -94,9 +95,10 @@ def run_provider(provider: str, battery: dict, today: str) -> dict:
         try:
             resp = providers.ask(provider, probe["prompt"])
             probe_records.append({"id": probe["id"], "output": resp["text"]})
-        except providers.ProviderError as e:
+        except Exception as e:
             errors += 1
-            probe_records.append({"id": probe["id"], "output": "", "error": str(e)[:300]})
+            probe_records.append({"id": probe["id"], "output": "",
+                                  "error": (str(e) or type(e).__name__)[:800]})
         time.sleep(providers.call_pause(provider))
 
     prev = previous_probe_texts(provider, today)
@@ -203,9 +205,18 @@ def main() -> None:
         with ThreadPoolExecutor(max_workers=len(active)) as pool:
             futures = {p: pool.submit(run_provider, p, battery, args.date) for p in active}
             for p, fut in futures.items():
-                payloads.append(fut.result())
+                try:
+                    payloads.append(fut.result())
+                except Exception as e:  # one broken provider must not cost
+                    # the other providers their measurements
+                    print(f"{p}: PROVIDER CRASHED: {str(e)[:300]}", flush=True)
+                    continue
                 row = payloads[-1]["summary"]
                 print(f"{p}: overall={row['overall']} errors={row['errors']}", flush=True)
+                first_err = next((r["error"] for r in payloads[-1]["tasks"]
+                                  if r.get("error") and not r["error"].startswith("skipped")), None)
+                if first_err:
+                    print(f"{p}: first error: {first_err[:300]}", flush=True)
     accepted = append_daily([pl["summary"] for pl in payloads])
     for pl in payloads:
         s = pl["summary"]

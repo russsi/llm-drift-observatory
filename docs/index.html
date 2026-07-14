@@ -6,109 +6,197 @@
 <title>LLM Drift Observatory — daily evidence of silent model changes</title>
 <meta name="description" content="Every day, the same frozen benchmark battery is sent to the same free-tier LLM APIs and graded by deterministic code. If a provider silently changes the model behind a stable name, the line moves.">
 <style>
-:root {
-  --page: #f9f9f7; --surface: #fcfcfb;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
-  --good: #006300; --bad: #d03b3b;
-  --s-groq: #2a78d6; --s-gemini: #1baf7a; --s-mistral: #eda100;
-  --s-openrouter: #008300; --s-openrouter-llama: #008300;
-  --s-cerebras: #4a3aa7; --s-groq-oss: #e34948;
-  --s-mock: #e87ba4;
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900; font-display: swap;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page: #0d0d0d; --surface: #1a1a19;
-    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
-    --good: #0ca30c; --bad: #e66767;
-    --s-groq: #3987e5; --s-gemini: #199e70; --s-mistral: #c98500;
-    --s-openrouter: #008300; --s-openrouter-llama: #008300;
-    --s-cerebras: #9085e9; --s-groq-oss: #e66767;
-    --s-mock: #d55181;
-  }
+@font-face {
+  font-family: "Geist Mono";
+  src: url("fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900; font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  /* surfaces */
+  --canvas: #101010; --lift: #1d1a18; --stroke: #3d3a39; --mid: #4d4947;
+  --bone: #eeeeee; --chalk: #fafafa;
+  /* ink */
+  --ink: #eeeeee; --ink-2: #b8b3b0; --muted: #8a8380;
+  /* functional accents — data voice only, never chrome */
+  --signal: #ee6018; --metric: #a0ca92;
+  /* categorical series (validated against #101010) */
+  --s-groq: #3987e5; --s-gemini: #199e70; --s-mistral: #c98500;
+  --s-openrouter: #008300; --s-openrouter-llama: #008300;
+  --s-cerebras: #9085e9; --s-groq-oss: #e66767;
+  --s-mock: #d55181;
+  --sans: "Geist", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 * { box-sizing: border-box; margin: 0; }
+a, button, summary { transition: color .15s cubic-bezier(.4,0,.2,1), border-color .15s cubic-bezier(.4,0,.2,1), background-color .15s cubic-bezier(.4,0,.2,1); }
 body {
-  background: var(--page); color: var(--ink);
-  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
-  padding: 32px 16px 64px;
+  background: var(--canvas); color: var(--ink);
+  font: 400 14px/1.43 var(--sans);
+  padding: 0 24px 96px;
 }
-.wrap { max-width: 980px; margin: 0 auto; }
-h1 { font-size: 26px; letter-spacing: -0.02em; }
-.tagline { color: var(--ink-2); margin-top: 4px; max-width: 640px; }
-.meta { color: var(--muted); font-size: 13px; margin-top: 10px; }
+.wrap { max-width: 1200px; margin: 0 auto; }
+
+/* ---- top nav ---- */
+nav { display: flex; align-items: center; gap: 16px; height: 64px; }
+.wordmark { display: inline-flex; align-items: center; gap: 10px;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink); text-decoration: none; }
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--signal); flex: none; }
+.pulse.ok { background: var(--metric); }
+nav .spacer { flex: 1; }
+.ghost { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: .04em;
+  color: var(--ink); text-decoration: none; border: 1px solid var(--stroke);
+  padding: 9px 14px; background: transparent; }
+.ghost:hover { color: var(--chalk); border-color: var(--chalk); }
+
+/* ---- hero ---- */
+header.hero { padding: 56px 0 0; }
+h1 { font: 400 44px/1.12 var(--sans); letter-spacing: -1.1px; color: var(--ink); max-width: 720px; }
+.tagline { color: var(--muted); font-size: 16px; line-height: 1.5; margin-top: 16px; max-width: 640px; }
+.meta { font: 400 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink-2); margin-top: 24px; }
 .meta a { color: inherit; }
-h2 { font-size: 16px; margin: 36px 0 4px; }
-.sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
-.card {
-  background: var(--surface); border: 1px solid var(--ring);
-  border-radius: 10px; padding: 16px;
-}
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 10px; margin-top: 20px; }
-.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; }
-.tile .name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
-.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
-.tile .val { font-size: 26px; font-weight: 650; margin-top: 2px; }
-.tile .delta { font-size: 12.5px; }
-.tile .model { font-size: 11.5px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.up { color: var(--good); } .down { color: var(--bad); } .flat { color: var(--muted); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 12px; }
+
+/* ---- section rhythm ---- */
+section { margin-top: 80px; }
+.eyebrow { display: flex; align-items: center; gap: 8px;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink-2); margin-bottom: 6px; }
+.sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; max-width: 640px; }
+
+/* ---- metric tiles ---- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 24px; margin-top: 56px; }
+.tile { border: 1px solid var(--lift); border-radius: 10px; padding: 20px; }
+.tile .name { display: flex; align-items: center; gap: 8px;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px; color: var(--ink-2); }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.tile .val { font: 400 36px/1.1 var(--sans); letter-spacing: -1.12px; color: var(--ink); margin-top: 10px; }
+.tile .delta { font: 400 12px var(--mono); letter-spacing: -0.24px; margin-top: 6px; }
+.tile .spark { margin-top: 12px; }
+.tile .spark svg { display: block; width: 100%; height: 40px; }
+.tile .model { font-size: 12px; color: var(--muted); margin-top: 10px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile .model a { color: inherit; text-decoration: none; }
+.tile .model a:hover { color: var(--ink-2); }
+.up { color: var(--metric); } .down { color: var(--signal); } .flat { color: var(--muted); }
+
+/* ---- the method: the one light card ---- */
+.method { background: var(--bone); color: #101010; border-radius: 10px; padding: 24px; margin-top: 80px; }
+.method .eyebrow { color: #101010; margin-bottom: 12px; }
+.method .eyebrow .pulse { background: var(--signal); }
+.method h2 { font: 400 36px/1.1 var(--sans); letter-spacing: -1.12px; margin-bottom: 12px; }
+.method p { font-size: 16px; line-height: 1.5; color: #3d3a39; max-width: 720px; }
+.method ul { margin: 16px 0 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 8px 24px; }
+.method li { font: 400 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: #101010; padding: 8px 0; border-top: 1px solid #d6d2cf; }
+
+/* ---- charts ---- */
+.card { border: 1px solid var(--lift); border-radius: 10px; padding: 20px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-bottom: 16px;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 24px; }
+.chart-label { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink-2); margin-bottom: 10px; }
 svg { display: block; width: 100%; height: auto; }
-svg text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--muted); }
-svg .dlabel { font-size: 11px; font-weight: 600; }
-.gridline { stroke: var(--grid); stroke-width: 1; }
-.baseline { stroke: var(--axis); stroke-width: 1; }
+svg text { font: 400 11px var(--mono); fill: var(--muted); }
+svg .dlabel { font: 400 11px var(--mono); fill: var(--ink-2); }
+.gridline { stroke: var(--lift); stroke-width: 1; }
+.baseline { stroke: var(--stroke); stroke-width: 1; }
+.zoom { cursor: zoom-in; }
+.zoom:hover { border-color: var(--stroke); }
+
+/* ---- tooltip ---- */
 #tooltip {
   position: absolute; pointer-events: none; display: none; z-index: 10;
-  background: var(--surface); border: 1px solid var(--ring); border-radius: 8px;
-  padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.12);
-  min-width: 130px;
+  background: var(--canvas); border: 1px solid var(--stroke); border-radius: 3px;
+  padding: 10px 12px; font: 400 12px/1.5 var(--mono); letter-spacing: -0.24px;
+  min-width: 150px;
 }
-#tooltip .tt-date { font-weight: 600; margin-bottom: 4px; }
-#tooltip .tt-row { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
-#tooltip .tt-row b { margin-left: auto; color: var(--ink); font-variant-numeric: tabular-nums; }
-.alert { border-left: 3px solid var(--bad); padding: 8px 12px; margin-bottom: 8px; background: var(--surface); border-radius: 0 8px 8px 0; font-size: 13.5px; }
-.alert .when { color: var(--muted); font-size: 12px; }
-.quiet { color: var(--ink-2); font-size: 14px; }
-table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+#tooltip .tt-date { color: var(--ink); text-transform: uppercase; margin-bottom: 6px; }
+#tooltip .tt-row { display: flex; align-items: center; gap: 7px; color: var(--ink-2); }
+#tooltip .tt-row b { margin-left: auto; font-weight: 400; color: var(--ink); font-variant-numeric: tabular-nums; padding-left: 12px; }
+
+/* ---- alerts ---- */
+.alert { display: flex; gap: 10px; align-items: baseline; border: 1px solid var(--lift);
+  border-left: 2px solid var(--signal); border-radius: 0 10px 10px 0;
+  padding: 14px 16px; margin-bottom: 8px; font-size: 14px; }
+.alert .pulse { position: relative; top: -1px; }
+.alert .when { font: 400 12px var(--mono); letter-spacing: -0.24px; color: var(--muted); margin-top: 4px; }
+.quiet { display: inline-flex; align-items: center; gap: 8px;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink-2); border: 1px solid var(--lift); border-radius: 3px; padding: 10px 14px; }
+
+/* ---- table ---- */
+table { border-collapse: collapse; width: 100%;
+  font: 400 13px var(--mono); letter-spacing: -0.24px; }
+th, td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--lift);
+  font-variant-numeric: tabular-nums; }
 th:first-child, td:first-child { text-align: left; }
-th { color: var(--muted); font-weight: 600; font-size: 12px; }
+tr:last-child td { border-bottom: none; }
+th { color: var(--muted); font-weight: 400; text-transform: uppercase; font-size: 11px; }
+td { color: var(--ink-2); }
+td:first-child { color: var(--ink); }
 .overflow { overflow-x: auto; }
-.empty { padding: 40px; text-align: center; color: var(--muted); }
-.tile .model a { color: inherit; text-decoration: none; }
-.tile .model a:hover { text-decoration: underline; color: var(--ink-2); }
-.zoom { cursor: zoom-in; }
-.zoom:hover { border-color: var(--axis); }
+.empty { padding: 48px; text-align: center; color: var(--muted);
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px; }
+
+/* ---- battery browser ---- */
+details.batcat { border: 1px solid var(--lift); border-radius: 10px;
+  padding: 14px 20px; margin-bottom: 8px; }
+details.batcat summary { cursor: pointer; list-style: none;
+  font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px; color: var(--ink); }
+details.batcat summary::before { content: "+ "; color: var(--muted); }
+details.batcat[open] summary::before { content: "− "; }
+details.batcat summary:hover { color: var(--chalk); }
+details.batcat summary::-webkit-details-marker { display: none; }
+.task { padding: 12px 0 12px 2px; border-bottom: 1px solid var(--lift); font-size: 14px;
+  color: var(--ink-2); display: flex; gap: 12px; align-items: baseline; }
+.task:first-of-type { margin-top: 10px; }
+.task:last-child { border-bottom: none; }
+.tid { font: 400 11px var(--mono); color: var(--muted); flex: none; width: 70px; }
+.chip { margin-left: auto; flex: none; font: 400 10px var(--mono); text-transform: uppercase;
+  letter-spacing: -0.2px; color: var(--muted); border: 1px solid var(--stroke);
+  border-radius: 3px; padding: 3px 8px; white-space: nowrap; }
+
+/* ---- modal ---- */
 #modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.45); z-index: 20; padding: 16px; }
-#modal-card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px;
-  padding: 18px 20px; width: min(960px, 96vw); position: relative; }
-#modal-close { position: absolute; top: 8px; right: 12px; background: none; border: none;
+  background: rgba(0,0,0,.6); z-index: 20; padding: 16px; }
+#modal-card { background: var(--canvas); border: 1px solid var(--stroke); border-radius: 20px;
+  padding: 24px; width: min(980px, 96vw); position: relative; }
+#modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none;
   color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; }
 #modal-close:hover, #modal-close:focus { color: var(--ink); }
-#modal-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-details.batcat { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
-  padding: 10px 14px; margin-bottom: 8px; }
-details.batcat summary { cursor: pointer; font-weight: 600; font-size: 14px; }
-details.batcat summary:hover { color: var(--ink-2); }
-.task { padding: 8px 0 8px 2px; border-bottom: 1px solid var(--grid); font-size: 13.5px;
-  color: var(--ink-2); display: flex; gap: 10px; align-items: baseline; }
-.task:last-child { border-bottom: none; }
-.tid { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; flex: none; width: 66px; }
-.chip { margin-left: auto; flex: none; font-size: 11px; color: var(--muted);
-  border: 1px solid var(--grid); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
-footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--grid); padding-top: 16px; }
+#modal-title { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink); margin-bottom: 12px; }
+
+/* ---- footer ---- */
+footer { margin-top: 96px; border-top: 1px solid var(--lift); padding-top: 40px;
+  color: var(--muted); font-size: 14px; }
+footer .fhead { font: 400 12px var(--mono); text-transform: uppercase; letter-spacing: -0.24px;
+  color: var(--ink); margin-bottom: 8px; }
 footer a { color: var(--ink-2); }
+footer a:hover { color: var(--chalk); }
+footer p { max-width: 640px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>LLM Drift Observatory</h1>
+  <nav>
+    <a class="wordmark" href="./"><span class="pulse" id="nav-pulse"></span>LLM Drift Observatory</a>
+    <span class="spacer"></span>
+    <a class="ghost" href="https://github.com/russsi/llm-drift-observatory" target="_blank" rel="noopener">GitHub →</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Same name. Same model? The receipts, daily.</h1>
     <p class="tagline">Every day, the same frozen battery of 36 tasks is sent to the same free-tier
     LLM APIs and graded by deterministic code — no LLM judges. If a provider silently changes the
     model behind a stable name, the line moves. Nobody can recreate this history later.</p>
@@ -117,38 +205,67 @@ footer a { color: var(--ink-2); }
 
   <div class="tiles" id="tiles"></div>
 
-  <h2>Overall accuracy</h2>
-  <p class="sub">Share of the 36 graded tasks passed, per provider per day. Temperature 0, fixed prompts, battery published in the repo.</p>
-  <div class="legend" id="legend-main"></div>
-  <div class="card"><div id="chart-main"></div></div>
-
-  <h2>By category</h2>
-  <p class="sub">Six tasks per category. A drop in one category with others flat is the classic quantization / new-safety-filter signature.</p>
-  <div class="grid2" id="cats"></div>
-
-  <h2>Latency &amp; consistency</h2>
-  <div class="grid2">
-    <div class="card zoom" id="card-lat" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">Median latency, ms</div><div id="chart-lat"></div></div>
-    <div class="card zoom" id="card-stab" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">Same-prompt similarity vs previous day (temp 0)</div><div id="chart-stab"></div></div>
+  <div class="method">
+    <div class="eyebrow"><span class="pulse"></span>The method</div>
+    <h2>An instrument, not a leaderboard.</h2>
+    <p>The battery is frozen: tasks are never edited or removed once live. One day of scores means
+    nothing — months of a flat line mean that when the line moves, something changed on the
+    provider's side, and this page has the timestamped receipts.</p>
+    <ul>
+      <li>Frozen public battery</li>
+      <li>Deterministic grading — no LLM judges</li>
+      <li>Scores never recomputed</li>
+      <li>Partial days excluded, never scored</li>
+      <li>False alarms stay on the record</li>
+      <li>Raw transcripts public per day</li>
+    </ul>
   </div>
 
-  <h2>Drift alerts</h2>
-  <p class="sub">Raised only after ≥5 days of baseline and only beyond max(2σ, 0.12). False alarms stay on this record.</p>
-  <div id="alerts"></div>
+  <section>
+    <div class="eyebrow">Overall accuracy</div>
+    <p class="sub">Share of the 36 graded tasks passed, per provider per day. Temperature 0, fixed prompts, battery published in the repo.</p>
+    <div class="legend" id="legend-main"></div>
+    <div class="card"><div id="chart-main"></div></div>
+  </section>
 
-  <h2>Latest scores</h2>
-  <div class="card overflow"><table id="latest"></table></div>
+  <section>
+    <div class="eyebrow">By category</div>
+    <p class="sub">Six tasks per category. A drop in one category with others flat is the classic quantization / new-safety-filter signature.</p>
+    <div class="grid2" id="cats"></div>
+  </section>
 
-  <h2>The battery — every task, in the open</h2>
-  <p class="sub">Frozen since day one: tasks are never edited or removed once live (new ones only under a
-  bumped version). Every answer is graded by deterministic code — the grader type is shown per task;
-  expected answers and grading source are in the repo for audit.</p>
-  <div id="battery"></div>
+  <section>
+    <div class="eyebrow">Latency &amp; consistency</div>
+    <div class="grid2">
+      <div class="card zoom" id="card-lat" title="Click to enlarge"><div class="chart-label">Median latency, ms</div><div id="chart-lat"></div></div>
+      <div class="card zoom" id="card-stab" title="Click to enlarge"><div class="chart-label">Same-prompt similarity vs previous day (temp 0)</div><div id="chart-stab"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="pulse" id="alert-pulse"></span>Drift alerts</div>
+    <p class="sub">Raised only after ≥5 days of baseline and only beyond max(2σ, 0.12). False alarms stay on this record.</p>
+    <div id="alerts"></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Latest scores</div>
+    <div class="card overflow"><table id="latest"></table></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The battery — every task, in the open</div>
+    <p class="sub">Frozen since day one: tasks are never edited or removed once live (new ones only under a
+    bumped version). Every answer is graded by deterministic code — the grader type is shown per task;
+    expected answers and grading source are in the repo for audit.</p>
+    <div id="battery"></div>
+  </section>
 
   <footer>
-    Method: frozen public battery · deterministic grading · scores never recomputed ·
+    <div class="fhead">Method</div>
+    <p>Frozen public battery · deterministic grading · scores never recomputed ·
     misses recorded like hits. Source, raw daily transcripts and methodology:
-    <a id="repo-link" href="https://github.com/russsi/llm-drift-observatory">GitHub repository</a>.
+    <a id="repo-link" href="https://github.com/russsi/llm-drift-observatory">GitHub repository</a>.</p>
   </footer>
 </div>
 <div id="tooltip"></div>
@@ -178,6 +295,18 @@ const color = p => getComputedStyle(document.documentElement)
   .getPropertyValue("--s-" + p).trim() || "#888";
 const pct = v => v == null ? "–" : Math.round(v * 100) + "%";
 
+function sparkline(values, stroke) {
+  const vals = values.map((v,i) => [i, v]).filter(d => d[1] != null);
+  if (vals.length < 2) return "";
+  const w = 160, h = 40, pad = 2;
+  const xs = i => pad + (i / (values.length - 1)) * (w - 2*pad);
+  const lo = Math.min(...vals.map(d => d[1])), hi = Math.max(...vals.map(d => d[1]));
+  const ys = v => hi === lo ? h/2 : pad + (1 - (v - lo) / (hi - lo)) * (h - 2*pad);
+  const d = vals.map((dv,k) => (k ? "L" : "M") + xs(dv[0]).toFixed(1) + "," + ys(dv[1]).toFixed(1)).join(" ");
+  return `<div class="spark"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+    <path d="${d}" fill="none" stroke="${stroke}" stroke-width="1"/></svg></div>`;
+}
+
 async function boot() {
   let data;
   try { data = await (await fetch("data.json?t=" + Date.now())).json(); }
@@ -190,6 +319,10 @@ async function boot() {
 
   const byProv = {};
   providers.forEach(p => byProv[p] = rows.filter(r => r.provider === p));
+
+  // nav pulse: green when the record is quiet, signal orange when alerting
+  document.getElementById("nav-pulse").className = "pulse" + (alerts.length ? "" : " ok");
+  document.getElementById("alert-pulse").className = "pulse" + (alerts.length ? "" : " ok");
 
   // --- stat tiles ---
   const tiles = document.getElementById("tiles");
@@ -205,11 +338,14 @@ async function boot() {
       const arrow = Math.abs(d) < 0.02 ? "→" : d > 0 ? "↑" : "↓";
       deltaHtml = `<span class="${cls}">${arrow} ${(d>=0?"+":"")}${(d*100).toFixed(1)} pp vs 7-day mean</span>`;
     }
+    const hist = dates.map(dd => { const r = rs.find(x => x.date === dd);
+      return r && r.overall != null ? r.overall : null; });
     tiles.insertAdjacentHTML("beforeend", `
       <div class="tile">
         <div class="name"><span class="dot" style="background:${color(p)}"></span>${p}</div>
         <div class="val">${pct(last.overall)}</div>
         <div class="delta">${deltaHtml}</div>
+        ${sparkline(hist, color(p))}
         <div class="model" title="${models[p]||""}">${
           MODEL_LINKS[p]
             ? `<a href="${MODEL_LINKS[p]}" target="_blank" rel="noopener">${models[p]||p} ↗</a>`
@@ -234,13 +370,13 @@ async function boot() {
   Object.keys(CAT_LABELS).forEach(cat => {
     const id = "cat-" + cat;
     cats.insertAdjacentHTML("beforeend",
-      `<div class="card zoom" id="card-${cat}" title="Click to enlarge"><div class="sub" style="margin-bottom:6px">${CAT_LABELS[cat]}</div><div id="${id}"></div></div>`);
+      `<div class="card zoom" id="card-${cat}" title="Click to enlarge"><div class="chart-label">${CAT_LABELS[cat]}</div><div id="${id}"></div></div>`);
     lineChart("#" + id, dates, seriesOf(cat), {h:150, ymin:0, ymax:1, fmt:pct, small:true});
     document.getElementById("card-" + cat).addEventListener("click", () =>
       openModal(CAT_LABELS[cat], providers, dates, seriesOf(cat), {h:340, ymin:0, ymax:1, fmt:pct}));
   });
 
-  lineChart("#chart-lat", dates, seriesOf("latency_p50_ms"), {h:170, ymin:0, fmt:v=>v==null?"–":Math.round(v)+" ms", small:true});
+  lineChart("#chart-lat", dates, seriesOf("latency_p50_ms"), {h:170, ymin:0, fmt:v=>v==null?"–":String(Math.round(v)), small:true});
   lineChart("#chart-stab", dates, seriesOf("stability"), {h:170, ymin:0, ymax:1, fmt:v=>v==null?"–":v.toFixed(2), small:true});
   document.getElementById("card-lat").addEventListener("click", () =>
     openModal("Median latency, ms", providers, dates, seriesOf("latency_p50_ms"), {h:340, ymin:0, fmt:v=>v==null?"–":Math.round(v)+" ms"}));
@@ -263,14 +399,14 @@ async function boot() {
   // --- alerts ---
   const al = document.getElementById("alerts");
   if (!alerts.length) {
-    al.innerHTML = `<p class="quiet">No drift detected so far${dates.length<6?" (baseline still forming — alerts need ≥5 days of history)":""}.</p>`;
+    al.innerHTML = `<p class="quiet"><span class="pulse ok"></span>No drift detected so far${dates.length<6?" — baseline still forming (alerts need ≥5 days)":""}</p>`;
   } else {
     [...alerts].reverse().forEach(e => e.alerts.forEach(a => {
       const detail = Object.entries(a).filter(([k]) => k!=="type")
         .map(([k,v]) => `${k}: ${v}`).join(" · ");
       al.insertAdjacentHTML("beforeend",
-        `<div class="alert"><b>${e.provider}</b> — ${a.type.replace(/_/g," ")}
-         <div class="when">${e.date} · ${detail}</div></div>`);
+        `<div class="alert"><span class="pulse"></span><div><b>${e.provider}</b> — ${a.type.replace(/_/g," ")}
+         <div class="when">${e.date} · ${detail}</div></div></div>`);
     }));
   }
 
@@ -282,7 +418,7 @@ async function boot() {
   const body = providers.map(p => {
     const r = byProv[p].find(x => x.date === lastDate);
     if (!r) return "";
-    return `<tr><td><span class="dot" style="background:${color(p)};display:inline-block;margin-right:6px"></span>${p}</td>` +
+    return `<tr><td><span class="dot" style="background:${color(p)};display:inline-block;margin-right:8px"></span>${p}</td>` +
       cols.map(c => `<td>${c==="latency_p50_ms" ? (r[c]||"–") : pct(r[c])}</td>`).join("") + "</tr>";
   }).join("");
   document.getElementById("latest").innerHTML = head + body;
@@ -309,7 +445,10 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal()
 // ---- hand-rolled SVG line chart with crosshair tooltip ----
 function lineChart(sel, dates, series, opt) {
   const host = document.querySelector(sel);
-  const W = 900, H = opt.h, padL = 44, padR = opt.small ? 14 : 86, padT = 10, padB = 26;
+  // small multiples get a narrow viewBox so axis text renders near-native
+  // size instead of being scaled down with the chart
+  const W = opt.small ? 420 : 1000, H = opt.h,
+        padL = opt.small ? 48 : 44, padR = opt.small ? 22 : 100, padT = 10, padB = 26;
   const iw = W - padL - padR, ih = H - padT - padB;
   const n = dates.length;
   if (!n) { host.innerHTML = `<div class="empty">No data yet — first daily run pending.</div>`; return; }
@@ -341,14 +480,15 @@ function lineChart(sel, dates, series, opt) {
   });
 
   // direct labels with collision avoidance: lines often sit on the same value,
-  // so labels are spread apart vertically instead of stacking unreadably
+  // so labels are spread apart vertically instead of stacking unreadably.
+  // identity is the colored tick; the label text itself stays in ink
   if (!opt.small) {
     const labs = series.map(s => {
       const lastIdx = s.points.map((v,i) => v==null ? null : i).filter(v => v!=null).pop();
       if (lastIdx == null) return null;
       return { name: s.name, color: s.color, x: x(lastIdx) + 8, y: y(s.points[lastIdx]) + 4 };
     }).filter(Boolean).sort((a,b) => a.y - b.y);
-    const GAP = 14;
+    const GAP = 15;
     for (let i = 1; i < labs.length; i++)
       if (labs[i].y - labs[i-1].y < GAP) labs[i].y = labs[i-1].y + GAP;
     const over = labs.length ? labs[labs.length-1].y - (padT + ih + 4) : 0;
@@ -358,9 +498,10 @@ function lineChart(sel, dates, series, opt) {
         if (labs[i+1].y - labs[i].y < GAP) labs[i].y = labs[i+1].y - GAP;
     }
     labs.forEach(l =>
-      g += `<text class="dlabel" x="${l.x}" y="${l.y.toFixed(1)}" style="fill:${l.color}">${l.name}</text>`);
+      g += `<line x1="${l.x}" x2="${l.x+8}" y1="${(l.y-4).toFixed(1)}" y2="${(l.y-4).toFixed(1)}" stroke="${l.color}" stroke-width="2"/>` +
+           `<text class="dlabel" x="${l.x+12}" y="${l.y.toFixed(1)}">${l.name}</text>`);
   }
-  g += `<line id="xh" x1="0" x2="0" y1="${padT}" y2="${padT+ih}" stroke="var(--axis)" stroke-dasharray="3,3" visibility="hidden"/>`;
+  g += `<line id="xh" x1="0" x2="0" y1="${padT}" y2="${padT+ih}" stroke="var(--stroke)" stroke-dasharray="3,3" visibility="hidden"/>`;
 
   host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="line chart">${g}</svg>`;
 

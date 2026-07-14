@@ -115,8 +115,12 @@ def _call_openai_style(cfg: dict, prompt: str) -> dict:
     if r.status_code != 200:
         raise ProviderError(f"HTTP {r.status_code}: {r.text[:800]}")
     data = r.json()
+    # reasoning models sometimes return a message with no content key at
+    # all (e.g. every token went to reasoning) — that's an empty answer,
+    # not a crash (2026-07-14: a cerebras response killed the whole run)
+    choices = data.get("choices") or [{}]
     return {
-        "text": data["choices"][0]["message"]["content"] or "",
+        "text": (choices[0].get("message") or {}).get("content") or "",
         "model_reported": data.get("model", ""),
         "usage": data.get("usage", {}),
     }

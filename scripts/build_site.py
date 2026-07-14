@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from scripts.config import MIN_VALID
+from scripts.providers import PROVIDERS
 
 ROOT = Path(__file__).resolve().parent.parent
 DAILY = ROOT / "data" / "daily.csv"
@@ -52,13 +53,21 @@ def main() -> None:
                 alerts.append(e)
     alerts = alerts[-50:]
 
+    # shown on the site: currently watched series, plus any retired series
+    # that has at least one valid measurement under the current battery
+    # version (its line ends where the alias died). A series that is both
+    # dead and empty on this version (e.g. openrouter's gpt-oss-120b:free,
+    # which OpenRouter killed before one valid v2 day) would render as a
+    # permanent dash-only ghost — the README changelog is its record.
+    has_valid = {r["provider"] for r in rows if r["overall"] is not None}
     providers = sorted(
-        {r["provider"] for r in rows},
+        set(PROVIDERS) | has_valid,
         key=lambda p: PROVIDER_ORDER.index(p) if p in PROVIDER_ORDER else 99,
     )
-    models = {}
-    for r in rows:
-        models[r["provider"]] = r["model_alias"]
+    models = {p: cfg["model"] for p, cfg in PROVIDERS.items()}
+    for r in rows:  # retired series keep the alias they were watched under
+        if r["provider"] not in PROVIDERS:
+            models[r["provider"]] = r["model_alias"]
 
     tasks_pub = [
         {"id": t["id"], "category": t["category"], "prompt": t["prompt"],
