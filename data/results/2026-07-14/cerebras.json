@@ -14,8 +14,8 @@
   "refusal": "",
   "stability": "",
   "latency_p50_ms": "",
-  "errors": 32,
-  "n_graded": 6
+  "errors": 31,
+  "n_graded": 7
  },
  "tasks": [
   {
@@ -23,7 +23,7 @@
    "category": "math",
    "output": "73914 × 8267 = 73914 × (8000 + 200 + 60 + 7)  \n\n- 73914 × 8000 = 591,312,000  \n- 73914 × 200 = 14,782,800  \n- 73914 × 60 = 4,434,840  \n- 73914 × 7 = 517,398  \n\nAdding them:  \n\n591,312,000 + 14,782,800 = 606,094,800  \n606,094,800 + 4,434,840 = 610,529,640  \n610,529,640 + 517,398 = 611,047,038  \n\n**Answer: 611047038**",
    "passed": true,
-   "latency_ms": 674,
+   "latency_ms": 4893,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -32,7 +32,7 @@
    "category": "math",
    "output": "The powers of 7 modulo 10 repeat every 4:\n\n- \\(7^1 \\equiv 7\\)\n- \\(7^2 \\equiv 9\\)\n- \\(7^3 \\equiv 3\\)\n- \\(7^4 \\equiv 1\\)\n\nThus the cycle is \\(7,9,3,1\\).  \n\nCompute \\(2026 \\bmod 4\\):\n\n\\[\n2026 = 4 \\times 506 + 2 \\quad\\Rightarrow\\quad 2026 \\bmod 4 = 2.\n\\]\n\nThe second position in the cycle corresponds to the last digit \\(9\\).\n\n**Answer:** 9",
    "passed": true,
-   "latency_ms": 379,
+   "latency_ms": 1282,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -41,7 +41,7 @@
    "category": "math",
    "output": "To find the number of trailing zeros in \\(500!\\), we count how many times the factor \\(10 = 2 \\times 5\\) appears in the prime factorization. Since there are always more factors of 2 than 5, the count of factors of 5 determines the number of trailing zeros.\n\nCount the factors of 5 in \\(500!\\):\n\n\\[\n\\begin{aligned}\n\\left\\lfloor\\frac{500}{5}\\right\\rfloor &= 100 \\\\\n\\left\\lfloor\\frac{500}{25}\\right\\rfloor &= 20 \\\\\n\\left\\lfloor\\frac{500}{125}\\right\\rfloor &= 4 \\\\\n\\left\\lfloor\\frac{500}{625}\\right\\rfloor &= 0\n\\end{aligned}\n\\]\n\nAdd them up:\n\n\\[\n100 + 20 + 4 = 124.\n\\]\n\nThus, \\(500!\\) ends with **124 trailing zeros**.\n\n**Answer: 124**",
    "passed": true,
-   "latency_ms": 263,
+   "latency_ms": 330,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -50,7 +50,7 @@
    "category": "math",
    "output": "Let the original number be \\(x\\).\n\n1. Increase by \\(25\\%\\): \\(x \\times 1.25 = 1.25x\\).\n2. Decrease that result by \\(40\\%\\): \\(1.25x \\times 0.60 = 0.75x\\).\n\nWe are told this final value equals 360:\n\n\\[\n0.75x = 360 \\quad\\Longrightarrow\\quad x = \\frac{360}{0.75}=480.\n\\]\n\nSo the original number was **480**.\n\n**Answer: 480**",
    "passed": true,
-   "latency_ms": 212,
+   "latency_ms": 1009,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -59,7 +59,7 @@
    "category": "math",
    "output": "The conditions can be written as  \n\n\\[\n\\begin{cases}\nn \\equiv 2 \\pmod{3}\\\\\nn \\equiv 3 \\pmod{4}\\\\\nn \\equiv 4 \\pmod{5}\n\\end{cases}\n\\]\n\nNotice that each remainder is one less than the divisor:\n\n\\[\n2 = 3-1,\\qquad 3 = 4-1,\\qquad 4 = 5-1.\n\\]\n\nThus  \n\n\\[\nn \\equiv -1 \\pmod{3},\\quad n \\equiv -1 \\pmod{4},\\quad n \\equiv -1 \\pmod{5}.\n\\]\n\nAdding 1 to each congruence gives  \n\n\\[\nn+1 \\equiv 0 \\pmod{3},\\quad n+1 \\equiv 0 \\pmod{4},\\quad n+1 \\equiv 0 \\pmod{5},\n\\]\n\nso \\(n+1\\) must be a common multiple of 3, 4, and 5.  \nThe least common multiple is  \n\n\\[\n\\operatorname{lcm}(3,4,5)=60.\n\\]\n\nHence the smallest positive value for \\(n+1\\) is 60, giving  \n\n\\[\nn = 60 - 1 = 59.\n\\]\n\nChecking:  \n\n- \\(59 \\div 3 = 19\\) remainder \\(2\\)  \n- \\(59 \\div 4 = 14\\) remainder \\(3\\)  \n- \\(59 \\div 5 = 11\\) remainder \\(4\\)\n\nAll conditions are satisfied.\n\n**Answer: 59**",
    "passed": true,
-   "latency_ms": 400,
+   "latency_ms": 363,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -68,7 +68,7 @@
    "category": "math",
    "output": "To count the five‑digit numbers \\(d_1d_2d_3d_4d_5\\) with digit sum \\(9\\):\n\n1. The leading digit \\(d_1\\) must be at least \\(1\\).  \n   Set \\(x_1 = d_1-1\\) so that \\(x_1 \\ge 0\\).\n\n2. The condition becomes  \n   \\[\n   x_1 + d_2 + d_3 + d_4 + d_5 = 8,\n   \\]\n   with all variables non‑negative.  \n   Since the total is only \\(8\\), the upper bounds \\(x_1\\le 8\\) and \\(d_i\\le 9\\) are never violated.\n\n3. The number of non‑negative integer solutions to a sum of \\(5\\) variables equal to \\(8\\) is given by the stars‑and‑bars formula:\n   \\[\n   \\binom{8+5-1}{5-1} = \\binom{12}{4} = 495.\n   \\]\n\nThus there are **495** five‑digit numbers whose digits sum to exactly \\(9\\).\n\n**Answer: 495**",
    "passed": true,
-   "latency_ms": 668,
+   "latency_ms": 1739,
    "model_reported": "gpt-oss-120b",
    "refused": false
   },
@@ -80,7 +80,11 @@
   {
    "id": "logic-02",
    "category": "logic",
-   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+   "output": "Answer: oranges",
+   "passed": true,
+   "latency_ms": 698,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
   },
   {
    "id": "logic-03",
@@ -90,12 +94,12 @@
   {
    "id": "logic-04",
    "category": "logic",
-   "error": "skipped: daily quota exhausted"
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
   },
   {
    "id": "logic-05",
    "category": "logic",
-   "error": "skipped: daily quota exhausted"
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
   },
   {
    "id": "logic-06",
@@ -226,12 +230,12 @@
  "stability_probes": [
   {
    "id": "stab-01",
-   "output": "The first sliver of light pierces the horizon, turning the dark water into a shimmering ribbon of molten gold. As the sun climbs, the sky blushes from deep indigo to rose‑pink, and the waves catch the new colors, each crest flashing like a thousand tiny mirrors. By the time the sun fully rises, the ocean is awash in a warm, amber glow that seems to breathe life into the day ahead."
+   "output": "",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
   },
   {
    "id": "stab-02",
-   "output": "",
-   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+   "output": "**How a Refrigerator Keeps Your Food Cold – Explained for a 10‑Year‑Old**\n\nImagine you have a magic box that can pull the warm air out of your snack drawer and push it out the back, making everything inside feel nice and chilly. A real refrigerator does almost exactly that, but instead of magic it uses a few clever tricks with a special liquid called **refrigerant**. Let’s break it down step by step.\n\n---\n\n### 1. The Goal: Take Heat Away\nEverything that’s warm has **heat** in it. To keep food fresh, a fridge has to get the heat out of the inside and dump it somewhere else (usually the kitchen). Think of it like a tiny air‑conditioner that works all the time.\n\n---\n\n### 2. The Main Players\n| Part | What It Looks Like | What It Does |\n|------|-------------------|--------------|\n| **Refrigerant** | A clear, invisible gas (like the “invisible” stuff in a soda can) | Carries heat from inside the fridge to the back |\n| **Compressor** | A metal pump (looks a bit like a tiny engine) | Squeezes the refrigerant, making it hot and high‑pressure |\n| **Condenser Coils** | A set of metal tubes at the back of the fridge | Let the hot refrigerant give off its heat to the room |\n| **Expansion Valve (or capillary tube)** | A tiny narrow tube | Lets the refrigerant expand, turning it cold again |\n| **Evaporator Coils** | Thin metal tubes inside the fridge | The cold refrigerant absorbs heat from the food, making the inside cool |\n\n---\n\n### 3. The “Cold‑Making” Cycle – A Simple Story\n\n1. **Start Low and Cool**  \n   Inside the fridge, the refrigerant is a cold, low‑pressure gas. It’s hanging out in the **evaporator coils** (the tubes you can see if you open the freezer door).\n\n2. **Absorb Heat – “The Refrigerator Gets Warm”**  \n   As warm air from the food and the fridge interior touches those coils, the refrigerant **absorbs** that heat. When a gas takes in heat, it turns into a **warm vapor** (like steam from a kettle). The inside of the fridge gets cooler because the heat left the food and went into the refrigerant.\n\n3. **Pump It Up – “The Compressor Squeezes”**  \n   The warm vapor travels to the **compressor**. The compressor is like a strong pump that **squeezes** the vapor into a tiny space. This makes the vapor **very hot and high‑pressure**, kind of like when you rub your hands together fast and they get warm.\n\n4. **Dump the Heat – “The Back of the Fridge Gets Hot”**  \n   The hot, high‑pressure vapor then flows through the **condenser coils** at the back of the fridge. Here, it meets the cooler room air. The vapor **releases** the heat it was carrying, turning back into a liquid (think of steam turning into water on a cold window). The room gets a little warmer, but the fridge’s inside stays cold.\n\n5. **Cool Down Again – “The Expansion Valve”**  \n   The liquid refrigerant now travels through a tiny **expansion valve** (a very narrow tube). When it squeezes through this tiny opening, it **expands** quickly, which makes it **cold again**—just like how a spray can feels cold when you spray it.\n\n6. **Back to the Evaporator – “Ready to Chill More Food”**  \n   The cold liquid now returns to the **evaporator coils** inside the fridge, and the whole cycle starts over. Each time the refrigerant goes through this loop, it pulls more heat out of the food, keeping everything fresh.\n\n---\n\n### 4. Why It Works All the Time\nThe fridge’s thermostat (the little knob or digital display) watches the temperature inside. When it gets too warm, the thermostat tells the compressor to start the cycle. When the fridge is cold enough, the thermostat tells the compressor to stop. This on‑and‑off “heartbeat” keeps the temperature just right.\n\n---\n\n### 5. A Quick Analogy\n\nThink of a **refrigerator** like a **team of superheroes**:\n\n- **Refrigerant** is the hero that can change from “cold liquid” to “hot gas” and back again.\n- **Compressor** is the strong sidekick that squeezes the hero, making it hot.\n- **Condenser coils** are the place"
   },
   {
    "id": "stab-03",
