@@ -1,0 +1,242 @@
+{
+ "summary": {
+  "date": "2026-07-14",
+  "provider": "cerebras",
+  "battery_version": 2,
+  "model_alias": "gpt-oss-120b",
+  "model_reported": "gpt-oss-120b",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 32,
+  "n_graded": 6
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "output": "73914 × 8267 = 73914 × (8000 + 200 + 60 + 7)  \n\n- 73914 × 8000 = 591,312,000  \n- 73914 × 200 = 14,782,800  \n- 73914 × 60 = 4,434,840  \n- 73914 × 7 = 517,398  \n\nAdding them:  \n\n591,312,000 + 14,782,800 = 606,094,800  \n606,094,800 + 4,434,840 = 610,529,640  \n610,529,640 + 517,398 = 611,047,038  \n\n**Answer: 611047038**",
+   "passed": true,
+   "latency_ms": 674,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "output": "The powers of 7 modulo 10 repeat every 4:\n\n- \\(7^1 \\equiv 7\\)\n- \\(7^2 \\equiv 9\\)\n- \\(7^3 \\equiv 3\\)\n- \\(7^4 \\equiv 1\\)\n\nThus the cycle is \\(7,9,3,1\\).  \n\nCompute \\(2026 \\bmod 4\\):\n\n\\[\n2026 = 4 \\times 506 + 2 \\quad\\Rightarrow\\quad 2026 \\bmod 4 = 2.\n\\]\n\nThe second position in the cycle corresponds to the last digit \\(9\\).\n\n**Answer:** 9",
+   "passed": true,
+   "latency_ms": 379,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "output": "To find the number of trailing zeros in \\(500!\\), we count how many times the factor \\(10 = 2 \\times 5\\) appears in the prime factorization. Since there are always more factors of 2 than 5, the count of factors of 5 determines the number of trailing zeros.\n\nCount the factors of 5 in \\(500!\\):\n\n\\[\n\\begin{aligned}\n\\left\\lfloor\\frac{500}{5}\\right\\rfloor &= 100 \\\\\n\\left\\lfloor\\frac{500}{25}\\right\\rfloor &= 20 \\\\\n\\left\\lfloor\\frac{500}{125}\\right\\rfloor &= 4 \\\\\n\\left\\lfloor\\frac{500}{625}\\right\\rfloor &= 0\n\\end{aligned}\n\\]\n\nAdd them up:\n\n\\[\n100 + 20 + 4 = 124.\n\\]\n\nThus, \\(500!\\) ends with **124 trailing zeros**.\n\n**Answer: 124**",
+   "passed": true,
+   "latency_ms": 263,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "output": "Let the original number be \\(x\\).\n\n1. Increase by \\(25\\%\\): \\(x \\times 1.25 = 1.25x\\).\n2. Decrease that result by \\(40\\%\\): \\(1.25x \\times 0.60 = 0.75x\\).\n\nWe are told this final value equals 360:\n\n\\[\n0.75x = 360 \\quad\\Longrightarrow\\quad x = \\frac{360}{0.75}=480.\n\\]\n\nSo the original number was **480**.\n\n**Answer: 480**",
+   "passed": true,
+   "latency_ms": 212,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "output": "The conditions can be written as  \n\n\\[\n\\begin{cases}\nn \\equiv 2 \\pmod{3}\\\\\nn \\equiv 3 \\pmod{4}\\\\\nn \\equiv 4 \\pmod{5}\n\\end{cases}\n\\]\n\nNotice that each remainder is one less than the divisor:\n\n\\[\n2 = 3-1,\\qquad 3 = 4-1,\\qquad 4 = 5-1.\n\\]\n\nThus  \n\n\\[\nn \\equiv -1 \\pmod{3},\\quad n \\equiv -1 \\pmod{4},\\quad n \\equiv -1 \\pmod{5}.\n\\]\n\nAdding 1 to each congruence gives  \n\n\\[\nn+1 \\equiv 0 \\pmod{3},\\quad n+1 \\equiv 0 \\pmod{4},\\quad n+1 \\equiv 0 \\pmod{5},\n\\]\n\nso \\(n+1\\) must be a common multiple of 3, 4, and 5.  \nThe least common multiple is  \n\n\\[\n\\operatorname{lcm}(3,4,5)=60.\n\\]\n\nHence the smallest positive value for \\(n+1\\) is 60, giving  \n\n\\[\nn = 60 - 1 = 59.\n\\]\n\nChecking:  \n\n- \\(59 \\div 3 = 19\\) remainder \\(2\\)  \n- \\(59 \\div 4 = 14\\) remainder \\(3\\)  \n- \\(59 \\div 5 = 11\\) remainder \\(4\\)\n\nAll conditions are satisfied.\n\n**Answer: 59**",
+   "passed": true,
+   "latency_ms": 400,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "output": "To count the five‑digit numbers \\(d_1d_2d_3d_4d_5\\) with digit sum \\(9\\):\n\n1. The leading digit \\(d_1\\) must be at least \\(1\\).  \n   Set \\(x_1 = d_1-1\\) so that \\(x_1 \\ge 0\\).\n\n2. The condition becomes  \n   \\[\n   x_1 + d_2 + d_3 + d_4 + d_5 = 8,\n   \\]\n   with all variables non‑negative.  \n   Since the total is only \\(8\\), the upper bounds \\(x_1\\le 8\\) and \\(d_i\\le 9\\) are never violated.\n\n3. The number of non‑negative integer solutions to a sum of \\(5\\) variables equal to \\(8\\) is given by the stars‑and‑bars formula:\n   \\[\n   \\binom{8+5-1}{5-1} = \\binom{12}{4} = 495.\n   \\]\n\nThus there are **495** five‑digit numbers whose digits sum to exactly \\(9\\).\n\n**Answer: 495**",
+   "passed": true,
+   "latency_ms": 668,
+   "model_reported": "gpt-oss-120b",
+   "refused": false
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "skipped: daily quota exhausted"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "The first sliver of light pierces the horizon, turning the dark water into a shimmering ribbon of molten gold. As the sun climbs, the sky blushes from deep indigo to rose‑pink, and the waves catch the new colors, each crest flashing like a thousand tiny mirrors. By the time the sun fully rises, the ocean is awash in a warm, amber glow that seems to breathe life into the day ahead."
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "cerebras: HTTP 429: {\"message\":\"Requests per minute limit exceeded - too many requests sent.\",\"type\":\"too_many_requests_error\",\"param\":\"quota\",\"code\":\"request_quota_exceeded\"}"
+  }
+ ]
+}

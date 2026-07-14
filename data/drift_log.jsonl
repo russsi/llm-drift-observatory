@@ -3,3 +3,9 @@
 {"date": "2026-07-13", "provider": "groq", "alerts": []}
 {"date": "2026-07-13", "provider": "mistral", "alerts": []}
 {"date": "2026-07-13", "provider": "openrouter", "alerts": []}
+{"date": "2026-07-14", "provider": "cerebras", "alerts": []}
+{"date": "2026-07-14", "provider": "gemini", "alerts": []}
+{"date": "2026-07-14", "provider": "groq", "alerts": []}
+{"date": "2026-07-14", "provider": "groq-oss", "alerts": []}
+{"date": "2026-07-14", "provider": "mistral", "alerts": []}
+{"date": "2026-07-14", "provider": "openrouter", "alerts": []}

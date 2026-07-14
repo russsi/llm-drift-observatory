@@ -1,0 +1,219 @@
+{
+ "summary": {
+  "date": "2026-07-14",
+  "provider": "openrouter",
+  "battery_version": 2,
+  "model_alias": "openai/gpt-oss-120b:free",
+  "model_reported": "",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 39,
+  "n_graded": 0
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "openrouter: HTTP 404: {\"error\":{\"message\":\"This model is unavailable for free. The paid version is available now - use this slug instead: openai/gpt-oss-120b\",\"code\":404},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  }
+ ]
+}
