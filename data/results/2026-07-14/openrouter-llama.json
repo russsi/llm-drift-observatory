@@ -1,0 +1,219 @@
+{
+ "summary": {
+  "date": "2026-07-14",
+  "provider": "openrouter-llama",
+  "battery_version": 2,
+  "model_alias": "meta-llama/llama-3.3-70b-instruct:free",
+  "model_reported": "",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 39,
+  "n_graded": 0
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":9,\"retry_after_seconds_raw\":8.414,\"headers\":{\"Retry-After\":\"9\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":9,\"retry_after_seconds_raw\":8.226,\"headers\":{\"Retry-After\":\"9\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":9,\"retry_after_seconds_raw\":8.563,\"headers\":{\"Retry-After\":\"9\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":9,\"retry_after_seconds_raw\":8.484,\"headers\":{\"Retry-After\":\"9\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":10,\"retry_after_seconds_raw\":9.036,\"headers\":{\"Retry-After\":\"10\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "openrouter-llama: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Venice\",\"is_byok\":false,\"retry_after_seconds\":10,\"retry_after_seconds_raw\":9.608,\"headers\":{\"Retry-After\":\"10\"}}},\"user_id\":\"user_3FXJ1BsqyloS4YoytUd0xsM0HYA\"}"
+  }
+ ]
+}
