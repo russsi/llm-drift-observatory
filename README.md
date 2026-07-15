@@ -148,9 +148,3 @@ months beats a huge battery run once.
 **Day-to-day wiggles?** Expected — inference is not perfectly deterministic
 even at temperature 0. That's exactly why alerts require clearing a noise band
 measured from the instrument itself.
-
-## Credits
-
-Built by [russsi](https://github.com/russsi) with [Claude Code](https://claude.com/claude-code)
-as the pair programmer. Design, methodology decisions, and all data are the
-maintainer's responsibility.
