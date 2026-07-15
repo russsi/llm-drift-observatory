@@ -313,7 +313,10 @@ async function boot() {
   catch (e) { document.getElementById("meta").textContent = "data.json not found — first run pending"; return; }
 
   const { providers, rows, models, alerts } = data;
-  const dates = [...new Set(rows.map(r => r.date))].sort();
+  // only days with at least one valid measurement belong on the axis —
+  // days nulled out (older battery version, partial-quota days) would
+  // otherwise stretch the charts with emptiness
+  const dates = [...new Set(rows.filter(r => r.overall != null).map(r => r.date))].sort();
   document.getElementById("meta").innerHTML =
     `Updated ${data.generated_utc} · battery v${data.battery_version} · ${dates.length} day${dates.length===1?"":"s"} of history · runs unattended via GitHub Actions`;
 
@@ -476,7 +479,7 @@ function lineChart(sel, dates, series, opt) {
     const pts = s.points.map((v,i) => v==null ? null : [x(i), y(v)]).filter(Boolean);
     if (pts.length > 1)
       g += `<path d="M${pts.map(p=>p.map(c=>c.toFixed(1)).join(",")).join(" L")}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>`;
-    pts.forEach(p => g += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${pts.length>14?2:3.5}" fill="${s.color}"/>`);
+    pts.forEach(p => g += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${pts.length>14?2:pts.length===1?5:3.5}" fill="${s.color}"/>`);
   });
 
   // direct labels with collision avoidance: lines often sit on the same value,
