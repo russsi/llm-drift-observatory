@@ -17,3 +17,9 @@ date,provider,battery_version,model_alias,model_reported,overall,math,logic,inst
 2026-07-15,groq-oss,2,openai/gpt-oss-120b,openai/gpt-oss-120b,0.9167,1.0,1.0,0.6667,1.0,0.8333,1.0,0.7267,864,0,36
 2026-07-15,mistral,2,mistral-small-latest,mistral-small-latest,0.75,0.6667,1.0,0.1667,1.0,0.6667,1.0,1.0,1117,0,36
 2026-07-15,openrouter-llama,2,meta-llama/llama-3.3-70b-instruct:free,,,,,,,,,,,39,0
+2026-07-16,cerebras,2,gpt-oss-120b,gpt-oss-120b,0.9722,1.0,1.0,0.8333,1.0,1.0,1.0,0.44,444,0,36
+2026-07-16,gemini,2,gemini-3.5-flash,gemini-3.5-flash,,,,,,,,,,19,20
+2026-07-16,groq,2,llama-3.3-70b-versatile,llama-3.3-70b-versatile,0.7222,0.8333,1.0,0.1667,0.8333,0.5,1.0,0.7497,581,0,36
+2026-07-16,groq-oss,2,openai/gpt-oss-120b,openai/gpt-oss-120b,0.9444,1.0,1.0,0.8333,1.0,0.8333,1.0,0.6854,881,0,36
+2026-07-16,mistral,2,mistral-small-latest,mistral-small-latest,0.75,0.6667,1.0,0.1667,1.0,0.6667,1.0,1.0,1142,0,36
+2026-07-16,openrouter-llama,2,meta-llama/llama-3.3-70b-instruct:free,,,,,,,,,,,39,0
