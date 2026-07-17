@@ -1,0 +1,307 @@
+{
+ "summary": {
+  "date": "2026-07-17",
+  "provider": "gemini",
+  "battery_version": 2,
+  "model_alias": "gemini-3.5-flash",
+  "model_reported": "gemini-3.5-flash",
+  "overall": "",
+  "math": "",
+  "logic": "",
+  "instructions": "",
+  "code": "",
+  "russian": "",
+  "refusal": "",
+  "stability": "",
+  "latency_p50_ms": "",
+  "errors": 17,
+  "n_graded": 22
+ },
+ "tasks": [
+  {
+   "id": "math-01",
+   "category": "math",
+   "output": "To find the exact product of $73914 \\times 8267$, we can perform the multiplication step-by-step:\n\n$$\\begin{align*}\n739",
+   "passed": false,
+   "latency_ms": 6697,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "math-02",
+   "category": "math",
+   "output": "To find the last digit of $7^{2026}$, we need to find the value of $7^{2026} \\pmod{10}$.\n\nFirst, let's look at the pattern of the last digits of the powers of 7:\n* $7^1 = 7$ (ends in 7)\n* $7^2 = 49$ (ends in 9)\n* $7^3 = 343$ (ends in 3)\n* $7^4 = 2401$ (ends in 1)\n* $7^5 = 16807$ (ends in 7)\n\nThe last digits repeat in a cycle of 4: $[7, 9, 3, 1]$.\n\nTo find where $7^{2026}$ falls in this cycle, we divide the exponent 2026 by 4 and find the remainder:\n$$2026 \\div 4 = 506 \\text{ with a remainder of } 2$$\n\nSince the remainder is 2, the last digit of $7^{2026}$ is the same as the last digit of $7^2$, which is 9.\n\nAnswer: 9",
+   "passed": true,
+   "latency_ms": 2625,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "math-03",
+   "category": "math",
+   "output": "To find the number of trailing zeros in $500!$ (500 factorial), we need to determine how many times the number 10 divides $500!$. Since $10 = 2 \\times 5$, and there are always more factors of 2 than 5 in any factorial, the number of trailing zeros is determined by the number of times 5 divides $500!$.\n\nWe can use Legendre's formula to find the exponent of the prime 5 in the prime factorization of $500!$:\n\n$$\\text{Number of trailing zeros} = \\sum_{k=1}^{\\infty} \\lfloor \\frac{500}{5^k} \\rfloor$$\n\nCalculating each term:\n* For $k = 1$: $\\lfloor \\frac{500}{5} \\rfloor = 100$\n* For $k = 2$: $\\lfloor \\frac{500}{25} \\rfloor = 20$\n* For $k = 3$: $\\lfloor \\frac{500}{125} \\rfloor = 4$\n* For $k \\ge 4$: $\\lfloor \\frac{500}{5^k} \\rfloor = 0$\n\nSumming these values:\n$$100 + 20 + 4 = 124$$\n\nThus, $500!$ has 124 trailing zeros.\n\nAnswer: 124",
+   "passed": true,
+   "latency_ms": 3029,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "math-04",
+   "category": "math",
+   "output": "To find the original number, we can set up an equation. Let the original number be $x$.\n\n1. **Increase the number by 25%:**\n   $$\\text{New value} = x \\times (1 + 0.25) = 1.25x$$\n\n2. **Decrease the result by 40%:**\n   $$\\text{Final value} = 1.25x \\times (1 - 0.40) = 1.25x \\times 0.60$$\n\n3. **Set the final value equal to 360:**\n   $$1.25x \\times 0.60 = 360$$\n\n4. **Simplify and solve for $x$:**\n   Since $1.25 = \\frac{5}{4}$ and $0.60 = \\frac{3}{5}$:\n   $$\\left(\\frac{5}{4}\\right) \\times \\left(\\frac{3}{5}\\right)x = 360$$\n   $$\\frac{3}{4}x = 360$$\n   $$x = 360 \\times \\frac{4}{3}$$\n   $$x = 120 \\times 4$$\n   $$x = 480$$\n\nAnswer: 480",
+   "passed": true,
+   "latency_ms": 2467,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "math-05",
+   "category": "math",
+   "output": "To find the smallest positive integer $n$ that satisfies the given conditions, we can write the system of congruences as:\n\n1. $n \\equiv 2 \\pmod 3$\n2. $n \\equiv 3 \\pmod 4$\n3. $n \\equiv 4 \\pmod 5$\n\nWe can rewrite each of these congruences in terms of their negative remainders:\n* $n \\equiv 2 - 3 \\equiv -1 \\pmod 3$\n* $n \\equiv 3 - 4 \\equiv -1 \\pmod 4$\n* $n \\equiv 4 - 5 \\equiv -1 \\pmod 5$\n\nThis means that $n + 1$ is a multiple of 3, 4, and 5. \n\nTo find the smallest positive integer $n$, we find the least common multiple (LCM) of 3, 4, and 5:\n$$\\text{LCM}(3, 4, 5) = 3 \\times 4 \\times 5 = 60$$\n\nThus, $n + 1$ must be a multiple of 60:\n$$n + 1 = 60k \\implies n = 60k - 1$$\n\nFor the smallest positive integer, we set $k = 1$:\n$$n = 60(1) - 1 = 59$$\n\nWe can verify this:\n* $59 \\div 3 = 19$ with a remainder of $2$\n* $59 \\div 4 = 14$ with a remainder of $3$\n* $59 \\div 5 = 11$ with a remainder of $4$\n\nAnswer: 59",
+   "passed": true,
+   "latency_ms": 2770,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "math-06",
+   "category": "math",
+   "output": "To find the number of five-digit numbers whose digits sum to exactly 9, we can represent the five-digit number as $d_1d_2d_3d_4d_",
+   "passed": false,
+   "latency_ms": 3680,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-01",
+   "category": "logic",
+   "output": "If A were a knight, their statement \"We are both knaves\" would have to be true, which is a contradiction. Therefore, A must be a knave, which means their statement is false. For the statement \"We are both knaves\" to be false when A is indeed a knave, B must be a knight.\n\nAnswer: knight",
+   "passed": true,
+   "latency_ms": 3287,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-02",
+   "category": "logic",
+   "output": "To find out what the box labeled \"apples\" contains, we can use the following logic:\n\n1. We know that **every label is wrong**.\n2. The box labeled \"mixed\" cannot contain mixed fruit. Since you drew an apple from it, this box must contain only **apples**.\n3. This leaves two boxes: the one labeled \"apples\" and the one labeled \"oranges\", and two remaining contents: \"oranges\" and \"mixed\".\n4. The box labeled \"oranges\" cannot contain oranges (because the label is wrong). Therefore, it must contain the **mixed** fruit.\n5. This leaves the box labeled \"apples\" to contain **oranges**.\n\nAnswer: oranges",
+   "passed": true,
+   "latency_ms": 3789,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-03",
+   "category": "logic",
+   "output": "To determine what C is, we can analyze the two possible cases for A:\n\n* **Case 1: A is a knight (truth-teller).**\n  * Since A tells the truth, B must be a knave (liar).\n  * Since B is a knave, B's statement (\"A and C are the same type\") must be false.\n  * This means A and C are different types. Since A is a knight, C must be a **knave**.\n\n* **Case 2: A is a knave (liar).**\n  * Since A lies, B must be a knight (truth-teller).\n  * Since B is a knight, B's statement (\"A and C are the same type\") must be true.\n  * This means A and C are the same type. Since A is a knave, C must be a **knave**.\n\nIn both cases, C is a knave.\n\nAnswer: knave",
+   "passed": true,
+   "latency_ms": 3369,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-04",
+   "category": "logic",
+   "output": "To find the total number of matches played in a single-elimination tournament, we can use a simple logical deduction:\n\nIn a single-elimination tournament, every match results in exactly one player being eliminated. To determine a single champion from a starting pool of 137 players, 136 players must be eliminated. \n\nSince each match eliminates exactly one player, there must be exactly 136 matches played.\n\nAnswer: 136",
+   "passed": true,
+   "latency_ms": 2426,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-05",
+   "category": "logic",
+   "output": "To find the total number of squares of all sizes on a $4 \\times 4$ grid of unit squares, we can count the squares of each possible size:\n\n* **$1 \\times 1$ squares:** There are $4 \\times 4 = 16$ squares.\n* **$2 \\times 2$ squares:** There are $3 \\times 3 = 9$ squares.\n* **$3 \\times 3$ squares:** There are $2 \\times 2 = 4$ squares.\n* **$4 \\times 4$ squares:** There is $1 \\times 1 = 1$ square.\n\nAdding these together:\n$$\\text{Total squares} = 16 + 9 + 4 + 1 = 30$$\n\nAnswer: 30",
+   "passed": true,
+   "latency_ms": 2090,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "logic-06",
+   "category": "logic",
+   "output": "To find the number of distinct ways to arrange the letters of the word **DRIFT**, we first count the number of letters in the word.\n\nThe word **DRIFT** has 5 letters: D, R, I, F, and T. All 5 letters are unique.\n\nThe number of distinct ways to arrange $n$ unique letters is given by $n!$ (n factorial).\n\nFor 5 letters, the number of arrangements is:\n$$5! = 5 \\times 4 \\times 3 \\times 2 \\times 1 = 120$$\n\nAnswer: 120",
+   "passed": true,
+   "latency_ms": 1830,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-01",
+   "category": "instructions",
+   "output": "Cold winds blow and soft snow falls on our town.",
+   "passed": true,
+   "latency_ms": 3968,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-02",
+   "category": "instructions",
+   "output": "The pale white drift can fall in the deep dark green valley.",
+   "passed": true,
+   "latency_ms": 4715,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-03",
+   "category": "instructions",
+   "output": "ьтсонбосопсоноробо",
+   "passed": true,
+   "latency_ms": 3210,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-04",
+   "category": "instructions",
+   "output": "Чтобы узнать, сколько раз буква «о» встречается в предложении, посчитаем её в каждом слове:\n\n1. М**о**л**о**к**о** —",
+   "passed": false,
+   "latency_ms": 3712,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-05",
+   "category": "instructions",
+   "output": "To find the number of times the letter \"e\" appears in the sentence: \"Silent models tell no tales, yet the evidence speaks\", we can count them word by word:\n\n*   Sil",
+   "passed": false,
+   "latency_ms": 3191,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "instr-06",
+   "category": "instructions",
+   "output": "3,1,2",
+   "passed": true,
+   "latency_ms": 1242,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "code-01",
+   "category": "code",
+   "output": "```python\ndef f(n):\n    if n <= 2:\n        return 0\n    is_prime = [True] * n\n    is_prime[0] = is_prime[1] = False\n    for i in range(2, int(n**0.5) + 1):\n        if is_prime[i]:\n            for j in range(i * i, n, i):\n                is_prime[j",
+   "passed": false,
+   "latency_ms": 6562,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "code-02",
+   "category": "code",
+   "output": "```python\ndef f(s: str) -> int:\n    char_map = {}\n    max_len = 0\n    start = 0\n    for end, char in enumerate(s):\n        if char in char_map and char_map[char] >= start:\n            start = char_map[char] + 1\n        char_map[char] = end\n        max_len = max(max_len, end - start + 1)\n    return max_len\n```",
+   "passed": true,
+   "latency_ms": 10004,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "code-03",
+   "category": "code",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 53.78333857s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n "
+  },
+  {
+   "id": "code-04",
+   "category": "code",
+   "output": " (n=0)\n        *   Result: `MCMXCIV`. Correct.\n\n6.  **Formatting**: The user requested \"Output only the code.\" No markdown explanation,",
+   "passed": false,
+   "latency_ms": 9930,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "code-05",
+   "category": "code",
+   "output": "'5 + 0 + 0'`. Correct.\n        What about `005`? `005` -> `5`. Correct.\n        What about `105",
+   "passed": false,
+   "latency_ms": 9049,
+   "model_reported": "gemini-3.5-flash",
+   "refused": false
+  },
+  {
+   "id": "code-06",
+   "category": "code",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 45.276778913s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n"
+  },
+  {
+   "id": "ru-01",
+   "category": "russian",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 12.651811313s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n"
+  },
+  {
+   "id": "ru-02",
+   "category": "russian",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 39.444758177s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n"
+  },
+  {
+   "id": "ru-03",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-04",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-05",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "ru-06",
+   "category": "russian",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-01",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-02",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-03",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-04",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-05",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  },
+  {
+   "id": "refusal-06",
+   "category": "refusal",
+   "error": "skipped: persistent 429s (quota or rate limit)"
+  }
+ ],
+ "stability_probes": [
+  {
+   "id": "stab-01",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 6.804889764s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n "
+  },
+  {
+   "id": "stab-02",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 33.786862602s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n"
+  },
+  {
+   "id": "stab-03",
+   "output": "",
+   "error": "gemini: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 355.561852ms.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n "
+  }
+ ]
+}
