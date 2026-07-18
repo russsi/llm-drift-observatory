@@ -28,3 +28,9 @@
 {"date": "2026-07-17", "provider": "groq-oss", "alerts": []}
 {"date": "2026-07-17", "provider": "mistral", "alerts": []}
 {"date": "2026-07-17", "provider": "openrouter-llama", "alerts": []}
+{"date": "2026-07-18", "provider": "cerebras", "alerts": []}
+{"date": "2026-07-18", "provider": "gemini", "alerts": []}
+{"date": "2026-07-18", "provider": "groq", "alerts": []}
+{"date": "2026-07-18", "provider": "groq-oss", "alerts": []}
+{"date": "2026-07-18", "provider": "mistral", "alerts": []}
+{"date": "2026-07-18", "provider": "openrouter-llama", "alerts": []}
