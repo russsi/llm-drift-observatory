@@ -40,13 +40,15 @@ unchanged name changes (see `scripts/providers.py`):
 - Groq — `openai/gpt-oss-120b` (series `groq-oss`)
 - Google — `gemini-3.5-flash`
 - Mistral — `mistral-small-latest`
-- OpenRouter — `meta-llama/llama-3.3-70b-instruct:free` (series `openrouter-llama`)
+- OpenRouter — `nvidia/nemotron-3-super-120b-a12b:free` (series `openrouter-nemotron`)
 - Cerebras — `gpt-oss-120b`
 
-Two same-weights pairs run on purpose: gpt-oss-120b on Groq + Cerebras,
-and llama-3.3-70b on Groq + OpenRouter — identical weights on different
-serving stacks. If a pair's lines diverge, the difference is
-infrastructure (quantization, sampling, batching), not the weights.
+One same-weights pair runs on purpose: gpt-oss-120b on Groq + Cerebras —
+identical weights on different serving stacks. If the pair's lines
+diverge, the difference is infrastructure (quantization, sampling,
+batching), not the weights. (A second pair, llama-3.3-70b on Groq +
+OpenRouter, was planned but OpenRouter's free llama endpoint never
+delivered a single valid day — see the changelog.)
 
 ## When a watched alias dies mid-record
 
@@ -80,6 +82,14 @@ silently re-pointed at different weights, because the series *is* the claim
   daily exhaustion, aborting runs a 20-second wait would have healed.
   Cost cerebras and gemini their 2026-07-14 measurements. Only a 429 that
   explicitly names a per-day window ends a run now.
+- 2026-07-19: **`openrouter-llama` series succeeded after zero valid days** —
+  every call 2026-07-14..19 failed "temporarily rate-limited upstream" (at
+  peak and off-peak alike), and by 07-19 OpenRouter listed no free llama
+  (or qwen) endpoint at all. The series dies with no measured days, so
+  nothing breaks; the six failed days stay in the repo as the record.
+  Successor series `openrouter-nemotron` (`nvidia/nemotron-3-super-120b-a12b:free`,
+  4 live upstream endpoints at succession time) starts from day zero. The
+  planned llama same-weights pair is dropped rather than re-pointed.
 
 A provider is skipped (recorded as absent, never as zero) if no API key is
 configured for it.

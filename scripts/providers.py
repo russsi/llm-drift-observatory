@@ -45,13 +45,17 @@ PROVIDERS = {
         "style": "openai",
     },
     # "openrouter" (openai/gpt-oss-120b:free) died 2026-07-14: OpenRouter
-    # moved the model to paid-only. Per the alias-death policy the series
-    # ended; "openrouter-llama" below is its successor, a new series.
-    "openrouter-llama": {
+    # moved the model to paid-only. Its successor "openrouter-llama"
+    # (meta-llama/llama-3.3-70b-instruct:free) never produced a single valid
+    # day: 2026-07-14..19 every call failed upstream-rate-limited, and by
+    # 07-19 no :free llama or qwen remained on OpenRouter at all. Succeeded
+    # 2026-07-19 with zero valid days lost; "openrouter-nemotron" is a new
+    # series per the alias-death policy.
+    "openrouter-nemotron": {
         "env": "OPENROUTER_API_KEY",
-        # same open-weights model as groq's llama-3.3-70b-versatile, second
-        # serving stack — if the two lines diverge, that's infrastructure
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        # nemotron family — no shared-weights twin in the battery; watched
+        # as its own line (4 upstream endpoints live as of 2026-07-19)
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
         "url": "https://openrouter.ai/api/v1/chat/completions",
         "style": "openai",
     },

@@ -18,6 +18,7 @@ OUT = ROOT / "docs" / "data.json"
 
 # Fixed display order = fixed palette slot per provider (never reassigned).
 PROVIDER_ORDER = ["groq", "gemini", "mistral", "openrouter", "openrouter-llama",
+                  "openrouter-nemotron",
                   "cerebras", "groq-oss", "mock"]
 
 SCORE_KEYS = ("overall", "math", "logic", "instructions", "code",

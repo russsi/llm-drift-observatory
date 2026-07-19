@@ -35,7 +35,7 @@
   --accent: #3ecf8e; --alarm: #d03b3b;
   /* categorical series (validated against #121212) */
   --s-groq: #3987e5; --s-gemini: #199e70; --s-mistral: #c98500;
-  --s-openrouter: #008300; --s-openrouter-llama: #008300;
+  --s-openrouter: #008300; --s-openrouter-llama: #008300; --s-openrouter-nemotron: #008300;
   --s-cerebras: #9085e9; --s-groq-oss: #e66767;
   --s-mock: #d55181;
   --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -310,6 +310,7 @@ const MODEL_LINKS = {
   mistral: "https://docs.mistral.ai/getting-started/models/",
   openrouter: "https://openrouter.ai/openai/gpt-oss-120b",
   "openrouter-llama": "https://openrouter.ai/meta-llama/llama-3.3-70b-instruct:free",
+  "openrouter-nemotron": "https://openrouter.ai/nvidia/nemotron-3-super-120b-a12b:free",
   cerebras: "https://inference-docs.cerebras.ai/models/overview",
 };
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
