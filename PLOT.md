@@ -45,6 +45,28 @@ After v1 is done: **stop building for two weeks** and let the data accumulate.
 The backlog (private holdout battery, more providers) waits until there is
 evidence real visitors want it.
 
+## Frozen operating rules (added 2026-07-19, before day 7)
+
+Added once, dated, after the resident critic demanded they exist in writing
+*before* the situations arise. These are additions of constraint, not
+retroactive justification.
+
+1. **Succession rule.** A series that produces zero graded tasks for **3
+   consecutive days** must be succeeded (new series, day zero, changelog
+   entry) or retired in the very next change to the repo. No per-case
+   negotiation; the record does not wait for a provider to feel better.
+2. **Streak rule.** The DoD's "7 consecutive green days" is literal. If the
+   streak breaks, the count restarts at zero and the launch date slips.
+   The definition is never relaxed to protect a calendar date.
+3. **Design freeze.** The dashboard's visual design is frozen as of
+   2026-07-19 until the post-launch two-week quiet period has passed.
+   Permitted site changes until then: new series slots, and fixes for
+   things that are broken — not things that are ugly.
+4. **History is append-only.** No force-push, rebase, or filter of
+   published history, ever again. The last permitted rewrite happened
+   2026-07-19 (author-identity privacy fix), pre-launch. Post-launch the
+   git history is part of the instrument.
+
 ## The gate for any new idea
 
 Before adding anything, it must pass all four:
