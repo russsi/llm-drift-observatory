@@ -40,3 +40,4 @@
 {"date": "2026-07-19", "provider": "groq-oss", "alerts": [{"type": "output_instability", "similarity_vs_prev_day": 0.5288, "floor": 0.55}]}
 {"date": "2026-07-19", "provider": "mistral", "alerts": []}
 {"date": "2026-07-19", "provider": "openrouter-llama", "alerts": []}
+{"date": "2026-07-19", "provider": "openrouter-nemotron", "alerts": []}

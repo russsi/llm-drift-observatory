@@ -41,3 +41,4 @@ date,provider,battery_version,model_alias,model_reported,overall,math,logic,inst
 2026-07-19,groq-oss,2,openai/gpt-oss-120b,openai/gpt-oss-120b,0.9444,1.0,1.0,0.6667,1.0,1.0,1.0,0.5288,992,0,36
 2026-07-19,mistral,2,mistral-small-latest,mistral-small-latest,0.75,0.6667,1.0,0.1667,1.0,0.6667,1.0,0.7931,1193,0,36
 2026-07-19,openrouter-llama,2,meta-llama/llama-3.3-70b-instruct:free,,,,,,,,,,,39,0
+2026-07-19,openrouter-nemotron,2,nvidia/nemotron-3-super-120b-a12b:free,nvidia/nemotron-3-super-120b-a12b:free,0.7222,0.8333,0.8333,0.6667,0.6667,0.3333,1.0,,5414,0,36
