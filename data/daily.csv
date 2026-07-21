@@ -48,3 +48,9 @@ date,provider,battery_version,model_alias,model_reported,overall,math,logic,inst
 2026-07-20,groq-oss,2,openai/gpt-oss-120b,openai/gpt-oss-120b,0.9167,1.0,1.0,0.8333,1.0,0.6667,1.0,0.579,964,0,36
 2026-07-20,mistral,2,mistral-small-latest,mistral-small-latest,0.75,0.6667,1.0,0.1667,1.0,0.6667,1.0,0.5886,1232,0,36
 2026-07-20,openrouter-nemotron,2,nvidia/nemotron-3-super-120b-a12b:free,nvidia/nemotron-3-super-120b-a12b:free,0.8611,1.0,1.0,0.5,0.8333,0.8333,1.0,0.5384,4336,0,36
+2026-07-21,cerebras,2,gpt-oss-120b,gpt-oss-120b,0.9722,1.0,1.0,0.8333,1.0,1.0,1.0,0.6098,479,0,36
+2026-07-21,gemini,2,gemini-3.5-flash,gemini-3.5-flash,,,,,,,,,,20,19
+2026-07-21,groq,2,llama-3.3-70b-versatile,llama-3.3-70b-versatile,0.75,0.8333,1.0,0.3333,0.8333,0.5,1.0,0.7261,576,0,36
+2026-07-21,groq-oss,2,openai/gpt-oss-120b,openai/gpt-oss-120b,0.9444,1.0,1.0,0.6667,1.0,1.0,1.0,0.7225,946,0,36
+2026-07-21,mistral,2,mistral-small-latest,mistral-small-latest,0.75,0.6667,1.0,0.1667,1.0,0.6667,1.0,0.8033,1239,0,36
+2026-07-21,openrouter-nemotron,2,nvidia/nemotron-3-super-120b-a12b:free,nvidia/nemotron-3-super-120b-a12b:free,0.75,1.0,0.8333,0.0,1.0,0.8333,0.8333,0.5273,5522,0,36
