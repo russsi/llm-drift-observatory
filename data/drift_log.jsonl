@@ -107,3 +107,9 @@
 {"date": "2026-07-30", "provider": "groq-oss", "alerts": [{"type": "score_shift", "metric": "russian", "today": 0.6667, "baseline_mean": 0.8809, "baseline_sd": 0.0813, "threshold": 0.2, "direction": "drop"}, {"type": "output_instability", "similarity_vs_prev_day": 0.5384, "floor": 0.55}]}
 {"date": "2026-07-30", "provider": "mistral", "alerts": []}
 {"date": "2026-07-30", "provider": "openrouter-nemotron", "alerts": [{"type": "output_instability", "similarity_vs_prev_day": 0.485, "floor": 0.55}]}
+{"date": "2026-07-31", "provider": "cerebras", "alerts": []}
+{"date": "2026-07-31", "provider": "gemini", "alerts": []}
+{"date": "2026-07-31", "provider": "groq", "alerts": []}
+{"date": "2026-07-31", "provider": "groq-oss", "alerts": []}
+{"date": "2026-07-31", "provider": "mistral", "alerts": []}
+{"date": "2026-07-31", "provider": "openrouter-nemotron", "alerts": [{"type": "score_shift", "metric": "russian", "today": 0.3333, "baseline_mean": 0.7857, "baseline_sd": 0.126, "threshold": 0.2519, "direction": "drop"}, {"type": "output_instability", "similarity_vs_prev_day": 0.4307, "floor": 0.55}]}
