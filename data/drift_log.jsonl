@@ -119,3 +119,9 @@
 {"date": "2026-08-01", "provider": "groq-oss", "alerts": [{"type": "output_instability", "similarity_vs_prev_day": 0.5248, "floor": 0.55}]}
 {"date": "2026-08-01", "provider": "mistral", "alerts": []}
 {"date": "2026-08-01", "provider": "openrouter-nemotron", "alerts": []}
+{"date": "2026-08-02", "provider": "cerebras", "alerts": [{"type": "score_shift", "metric": "instructions", "today": 0.5, "baseline_mean": 0.7857, "baseline_sd": 0.0813, "threshold": 0.2, "direction": "drop"}]}
+{"date": "2026-08-02", "provider": "gemini", "alerts": []}
+{"date": "2026-08-02", "provider": "groq", "alerts": []}
+{"date": "2026-08-02", "provider": "groq-oss", "alerts": [{"type": "output_instability", "similarity_vs_prev_day": 0.3805, "floor": 0.55}]}
+{"date": "2026-08-02", "provider": "mistral", "alerts": []}
+{"date": "2026-08-02", "provider": "openrouter-nemotron", "alerts": [{"type": "output_instability", "similarity_vs_prev_day": 0.4043, "floor": 0.55}]}
